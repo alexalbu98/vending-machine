@@ -9,7 +9,7 @@ public enum Products {
 
   WATER("0.90");
 
-  private final BigDecimal price;
+  private BigDecimal price;
 
   Products(String price) {
     this.price = new BigDecimal(price);
@@ -17,6 +17,10 @@ public enum Products {
 
   public BigDecimal getPrice() {
     return price;
+  }
+
+  public void setPrice(BigDecimal newPrice) {
+    this.price = newPrice;
   }
 
 }
