@@ -12,6 +12,7 @@ public class ConsoleClient {
 
   public void start() {
     while (true) {
+      beforeAction();
       displayStateMessage();
       displayOptions();
       doAction();
@@ -23,6 +24,15 @@ public class ConsoleClient {
     var input = readConsoleInput();
     try {
       vendingMachine.doAction(input);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  private void beforeAction() {
+    try {
+      String result = vendingMachine.beforeAction();
+      System.out.println(result);
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }

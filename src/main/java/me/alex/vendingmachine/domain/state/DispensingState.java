@@ -1,5 +1,6 @@
 package me.alex.vendingmachine.domain.state;
 
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
@@ -12,12 +13,24 @@ public class DispensingState implements VendingMachineState {
 
   @Override
   public String getStateMessage() {
-    return "Dispensing product...";
+    return "";
   }
 
   @Override
   public List<String> getAvailableOptions() {
     return List.of();
+  }
+
+  @Override
+  public String beforeAction() {
+    vendingMachine.decreaseProductInventory(productCode);
+    vendingMachine.updateCredit(productCode);
+    if (vendingMachine.getCurrentCredit().compareTo(BigDecimal.ZERO) == 0) {
+      vendingMachine.setState(new IdleState(vendingMachine));
+    } else {
+      vendingMachine.setState(new CoinInsertedState(vendingMachine));
+    }
+    return "Dispensing selected product... Enjoy!";
   }
 
   @Override

@@ -20,6 +20,11 @@ public class RefundingState implements VendingMachineState {
   }
 
   @Override
+  public String beforeAction() {
+    return "";
+  }
+
+  @Override
   public void doAction(String input) {
 
   }

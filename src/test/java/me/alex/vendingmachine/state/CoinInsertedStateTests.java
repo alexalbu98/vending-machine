@@ -52,6 +52,15 @@ public class CoinInsertedStateTests {
   }
 
   @Test
+  void doActionDoesNotTransitionsToDispensingStateWhenProductOutOfStock() {
+    doReturn(new BigDecimal("2.00")).when(vendingMachine).getCurrentCredit();
+    when(vendingMachine.getAvailableProducts()).thenReturn(List.of(
+        new ProductInventory(pepsi(), 10, 0, 60)));
+    CoinInsertedState state = new CoinInsertedState(vendingMachine);
+    assertThrows(IllegalStateException.class, () -> state.doAction("60"));
+  }
+
+  @Test
   void doActionTransitionsToRefundingStateForRefundInput() {
     CoinInsertedState state = new CoinInsertedState(vendingMachine);
     state.doAction("R");

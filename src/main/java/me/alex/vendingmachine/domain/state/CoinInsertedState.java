@@ -26,9 +26,15 @@ public class CoinInsertedState implements VendingMachineState {
   }
 
   @Override
+  public String beforeAction() {
+    return "";
+  }
+
+  @Override
   public void doAction(String input) {
     if (isProductCode(input)) {
       verifyCredit(input);
+      verifyProductQuantity(input);
       vendingMachine.setState(new DispensingState(vendingMachine, Integer.valueOf(input)));
       return;
     }
@@ -37,6 +43,18 @@ public class CoinInsertedState implements VendingMachineState {
       return;
     }
     vendingMachine.insertCoin(input);
+  }
+
+  private void verifyProductQuantity(String productCode) {
+    var productInventory = vendingMachine.getAvailableProducts().stream()
+        .filter(p -> p.getCode().toString().equals(productCode))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("Invalid product code: " + productCode));
+
+    if (productInventory.getQuantity() == 0) {
+      throw new IllegalStateException(
+          "Product is out of stock: " + productInventory.getProduct().name());
+    }
   }
 
   private boolean isProductCode(String input) {
