@@ -1,4 +1,4 @@
-package me.alex.vendingmachine.domain;
+package me.alex.vendingmachine.domain.product;
 
 import java.util.HashMap;
 import java.util.Map;

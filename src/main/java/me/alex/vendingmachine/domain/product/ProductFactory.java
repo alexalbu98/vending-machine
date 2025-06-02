@@ -1,7 +1,6 @@
-package me.alex.vendingmachine.domain.factory;
+package me.alex.vendingmachine.domain.product;
 
 import java.math.BigDecimal;
-import me.alex.vendingmachine.domain.Product;
 
 public class ProductFactory {
 

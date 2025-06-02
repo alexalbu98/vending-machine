@@ -3,6 +3,7 @@ package me.alex.vendingmachine.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import me.alex.vendingmachine.domain.product.ProductSystem;
 import me.alex.vendingmachine.state.VendingMachineState;
 
 @AllArgsConstructor
