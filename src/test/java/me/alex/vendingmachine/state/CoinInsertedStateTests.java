@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -36,10 +37,18 @@ public class CoinInsertedStateTests {
 
   @Test
   void doActionTransitionsToDispensingStateForValidProductCode() {
+    doReturn(new BigDecimal("2.00")).when(vendingMachine).getCurrentCredit();
     CoinInsertedState state = new CoinInsertedState(vendingMachine);
     state.doAction("60");
 
     verify(vendingMachine).setState(any(DispensingState.class));
+  }
+
+  @Test
+  void doActionDoesNotTransitionsToDispensingStateWhenInsufficientFunds() {
+    doReturn(new BigDecimal("0.05")).when(vendingMachine).getCurrentCredit();
+    CoinInsertedState state = new CoinInsertedState(vendingMachine);
+    assertThrows(IllegalStateException.class, () -> state.doAction("60"));
   }
 
   @Test

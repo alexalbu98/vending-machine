@@ -28,6 +28,7 @@ public class CoinInsertedState implements VendingMachineState {
   @Override
   public void doAction(String input) {
     if (isProductCode(input)) {
+      verifyCredit(input);
       vendingMachine.setState(new DispensingState(vendingMachine, Integer.valueOf(input)));
       return;
     }
@@ -41,5 +42,15 @@ public class CoinInsertedState implements VendingMachineState {
   private boolean isProductCode(String input) {
     return vendingMachine.getAvailableProducts().stream()
         .anyMatch(product -> product.getCode().toString().equals(input));
+  }
+
+  private void verifyCredit(String productCode) {
+    var productInventory = vendingMachine.getAvailableProducts().stream()
+        .filter(p -> p.getCode().toString().equals(productCode))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("Invalid product code: " + productCode));
+    if (vendingMachine.getCurrentCredit().compareTo(productInventory.getProduct().price()) == -1) {
+      throw new IllegalStateException("Insufficient credit. Please insert more coins!");
+    }
   }
 }

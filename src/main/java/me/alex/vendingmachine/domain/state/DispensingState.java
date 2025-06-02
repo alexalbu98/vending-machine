@@ -12,7 +12,7 @@ public class DispensingState implements VendingMachineState {
 
   @Override
   public String getStateMessage() {
-    return "";
+    return "Dispensing product...";
   }
 
   @Override
