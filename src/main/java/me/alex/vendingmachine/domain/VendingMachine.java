@@ -1,5 +1,6 @@
 package me.alex.vendingmachine.domain;
 
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,9 +20,14 @@ public class VendingMachine {
   private final ProductSystem productSystem;
   private final CoinReader coinReader;
   private final ChangeStore changeStore;
+  private BigDecimal credit = BigDecimal.ZERO;
 
   public void setState(VendingMachineState newState) {
     this.currentState = newState;
+  }
+
+  public VendingMachineState getCurrentState() {
+    return currentState;
   }
 
   public void addProductInventory(int position, ProductInventory productInventory) {
@@ -39,5 +45,6 @@ public class VendingMachine {
   public void insertCoin(String coin) {
     var readCoin = coinReader.readCoin(coin);
     changeStore.incrementChange(readCoin.name());
+    this.credit = this.credit.add(readCoin.value());
   }
 }

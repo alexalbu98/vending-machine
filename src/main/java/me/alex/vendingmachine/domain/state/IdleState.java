@@ -18,6 +18,11 @@ public class IdleState implements VendingMachineState {
 
   @Override
   public void doAction(String input) {
+    if(input.equals(CARD_PAYMENT)){
+      //TODO implement card payment
+      return;
+    }
     vendingMachine.insertCoin(input);
+
   }
 }
