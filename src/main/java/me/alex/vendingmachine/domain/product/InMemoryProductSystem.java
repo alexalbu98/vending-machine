@@ -1,6 +1,7 @@
 package me.alex.vendingmachine.domain.product;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,5 +29,9 @@ public class InMemoryProductSystem implements ProductSystem {
       return Optional.ofNullable(products.get(position));
     }
     return Optional.empty();
+  }
+
+  public List<ProductInventory> getProductInventory() {
+    return products.values().stream().toList();
   }
 }

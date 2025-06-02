@@ -20,10 +20,18 @@ public class VendingMachine {
   private final ProductSystem productSystem;
   private final CoinReader coinReader;
   private final ChangeStore changeStore;
-  private BigDecimal credit = BigDecimal.ZERO;
+  private BigDecimal currentCredit;
 
   public void setState(VendingMachineState newState) {
     this.currentState = newState;
+  }
+
+  public String getStateMessage() {
+    return currentState.getStateMessage();
+  }
+
+  public BigDecimal getCurrentCredit() {
+    return currentCredit;
   }
 
   public VendingMachineState getCurrentState() {
@@ -32,6 +40,10 @@ public class VendingMachine {
 
   public void addProductInventory(int position, ProductInventory productInventory) {
     productSystem.addProductInventory(position, productInventory);
+  }
+
+  public List<ProductInventory> getAvailableProducts() {
+    return productSystem.getProductInventory();
   }
 
   public List<String> getAvailableOptions() {
@@ -45,6 +57,6 @@ public class VendingMachine {
   public void insertCoin(String coin) {
     var readCoin = coinReader.readCoin(coin);
     changeStore.incrementChange(readCoin.name());
-    this.credit = this.credit.add(readCoin.value());
+    this.currentCredit = this.currentCredit.add(readCoin.value());
   }
 }

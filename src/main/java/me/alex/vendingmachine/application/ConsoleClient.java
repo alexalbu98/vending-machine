@@ -11,8 +11,8 @@ public class ConsoleClient {
   private final Scanner scanner = new Scanner(System.in);
 
   public void start() {
-    displayWelcomeMessage();
     while (true) {
+      displayStateMessage();
       displayOptions();
       doAction();
       sleep();
@@ -37,11 +37,12 @@ public class ConsoleClient {
     }
   }
 
-  private void displayWelcomeMessage() {
-    System.out.println("Welcome to the Vending Machine!");
+  private void displayStateMessage() {
+    System.out.println(vendingMachine.getStateMessage());
   }
 
   private void displayOptions() {
+    System.out.println("\nAvailable options:");
     var options = vendingMachine.getAvailableOptions();
     options.forEach(System.out::println);
   }

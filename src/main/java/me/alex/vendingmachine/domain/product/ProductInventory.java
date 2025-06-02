@@ -1,10 +1,12 @@
 package me.alex.vendingmachine.domain.product;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Getter
 public class ProductInventory {
 
   private final Product product;
