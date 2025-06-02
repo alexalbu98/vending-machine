@@ -30,4 +30,8 @@ public class ProductInventory {
     }
     this.quantity--;
   }
+
+  public int getQuantity() {
+    return this.quantity;
+  }
 }
