@@ -6,18 +6,18 @@ import java.util.Optional;
 
 public class ProductSystem {
 
-  private final Integer availableSlots;
+  private final Integer availableProductSlots;
   private final Map<Integer, ProductInventory> products;
 
-  public ProductSystem(Integer availableSlots) {
-    this.availableSlots = availableSlots;
+  public ProductSystem(Integer availableProductSlots) {
+    this.availableProductSlots = availableProductSlots;
     this.products = new HashMap<>();
   }
 
   public void addProductInventory(int position, ProductInventory productInventory) {
-    if (position <= 0 || position > availableSlots) {
+    if (position <= 0 || position > availableProductSlots) {
       throw new IllegalArgumentException(
-          "Product system position out of bounds! Available slots from 1 to " + availableSlots);
+          "Product system position out of bounds! Available slots from 1 to " + availableProductSlots);
     }
     products.put(position, productInventory);
   }

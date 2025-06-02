@@ -1,4 +1,4 @@
-package me.alex.vendingmachine.state;
+package me.alex.vendingmachine.domain.state;
 
 public interface VendingMachineState {
 
