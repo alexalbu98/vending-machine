@@ -15,7 +15,9 @@ public interface VendingMachineState {
   default String formatProductsAsString(VendingMachine vendingMachine) {
     return vendingMachine
         .getAvailableProducts().stream()
-        .map(p -> p.getProduct().name() + " - price: " + p.getProduct().price() + ", quantity: "
-            + p.getQuantity()).collect(Collectors.joining("\n"));
+        .map(
+            p -> p.getCode() + " - " + p.getProduct().name() + " - price: " + p.getProduct().price()
+                + ", quantity: "
+                + p.getQuantity()).collect(Collectors.joining("\n"));
   }
 }

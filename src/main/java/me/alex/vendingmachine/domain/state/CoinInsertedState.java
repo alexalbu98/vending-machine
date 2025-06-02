@@ -8,6 +8,7 @@ import me.alex.vendingmachine.domain.VendingMachine;
 public class CoinInsertedState implements VendingMachineState {
 
   private final VendingMachine vendingMachine;
+  private final String REFUND = "R";
 
   @Override
   public String getStateMessage() {
@@ -19,11 +20,26 @@ public class CoinInsertedState implements VendingMachineState {
   public List<String> getAvailableOptions() {
     return List.of(
         "Insert more coins! Accepted coins are: " + vendingMachine.getAvailableCoins(),
-        "Chose a product by typing its position");
+        "Chose a product by typing its code",
+        "Type 'R' for refund"
+    );
   }
 
   @Override
   public void doAction(String input) {
+    if (isProductCode(input)) {
+      vendingMachine.setState(new DispensingState(vendingMachine, Integer.valueOf(input)));
+      return;
+    }
+    if (input.equals(REFUND)) {
+      vendingMachine.setState(new RefundingState(vendingMachine));
+      return;
+    }
+    vendingMachine.insertCoin(input);
+  }
 
+  private boolean isProductCode(String input) {
+    return vendingMachine.getAvailableProducts().stream()
+        .anyMatch(product -> product.getCode().toString().equals(input));
   }
 }
