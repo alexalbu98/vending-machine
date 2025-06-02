@@ -27,10 +27,12 @@ public class VendingMachine {
     productSystem.addProductInventory(position, productInventory);
   }
 
-  public List<String> getAvailableOptions(){
-    return  currentState.getAvailableOptions();
+  public List<String> getAvailableOptions() {
+    return currentState.getAvailableOptions();
   }
 
-  //TODO define vending machine actions
+  public void doAction(String input) {
+    currentState.doAction(input);
+  }
 
 }

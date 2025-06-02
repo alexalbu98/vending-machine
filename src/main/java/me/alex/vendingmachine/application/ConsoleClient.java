@@ -1,5 +1,6 @@
 package me.alex.vendingmachine.application;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
@@ -8,11 +9,24 @@ import me.alex.vendingmachine.domain.VendingMachine;
 public class ConsoleClient {
 
   private final VendingMachine vendingMachine;
+  private final Scanner scanner = new Scanner(System.in);
 
   public void start() {
     displayWelcomeMessage();
-    displayOptions();
-    var input = readConsoleInput();
+    while (true) {
+      displayOptions();
+      vendingMachine.doAction(readConsoleInput());
+      sleep();
+    }
+  }
+
+  void sleep() {
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      System.err.println("Thread interrupted: " + e.getMessage());
+    }
   }
 
   private void displayWelcomeMessage() {
@@ -21,13 +35,10 @@ public class ConsoleClient {
 
   private void displayOptions() {
     var options = vendingMachine.getAvailableOptions();
-    System.out.println("Available options:");
     options.forEach(System.out::println);
   }
 
   private String readConsoleInput() {
-    try (Scanner scanner = new Scanner(System.in)) {
-      return scanner.nextLine();
-    }
+    return scanner.nextLine();
   }
 }

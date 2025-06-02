@@ -8,5 +8,5 @@ public interface VendingMachineState {
   void displayStatus();
   void displayOffer();
   void displayError();
-  void doAction();
+  void doAction(String input);
 }

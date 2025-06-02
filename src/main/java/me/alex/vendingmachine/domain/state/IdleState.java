@@ -1,7 +1,6 @@
 package me.alex.vendingmachine.domain.state;
 
 import java.util.List;
-import java.util.Scanner;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
 
@@ -12,7 +11,8 @@ public class IdleState implements VendingMachineState {
 
   @Override
   public List<String> getAvailableOptions() {
-    return List.of("Insert coins! Accepted coins are 0.05, 0.10, 0.50, 1.00, 2.00");
+    return List.of("Insert coins to start! Accepted coins are 0.05, 0.10, 0.50, 1.00, 2.00",
+        "Write 'card' to pay by credit card");
   }
 
   @Override
@@ -30,11 +30,6 @@ public class IdleState implements VendingMachineState {
   }
 
   @Override
-  public void doAction() {
-    Scanner scanner = new Scanner(System.in);
-    System.out.print("Enter a string: ");
-    String input = scanner.nextLine();
-    System.out.println("You entered: " + input);
-    scanner.close();
+  public void doAction(String input) {
   }
 }
