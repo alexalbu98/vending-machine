@@ -3,11 +3,13 @@ package me.alex.vendingmachine.domain.state;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
+import me.alex.vendingmachine.domain.coin.Coin;
 
 @RequiredArgsConstructor
 public class IdleState implements VendingMachineState {
 
   private final VendingMachine vendingMachine;
+  private static final String CARD_PAYMENT = "card";
 
   @Override
   public List<String> getAvailableOptions() {
@@ -31,5 +33,6 @@ public class IdleState implements VendingMachineState {
 
   @Override
   public void doAction(String input) {
+   Coin coin = vendingMachine.readCoin(input);
   }
 }

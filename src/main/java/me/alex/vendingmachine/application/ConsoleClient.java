@@ -1,6 +1,5 @@
 package me.alex.vendingmachine.application;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
@@ -15,12 +14,21 @@ public class ConsoleClient {
     displayWelcomeMessage();
     while (true) {
       displayOptions();
-      vendingMachine.doAction(readConsoleInput());
+      doAction();
       sleep();
     }
   }
 
-  void sleep() {
+  private void doAction() {
+    var input = readConsoleInput();
+    try {
+      vendingMachine.doAction(input);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  private void sleep() {
     try {
       Thread.sleep(1000);
     } catch (InterruptedException e) {
