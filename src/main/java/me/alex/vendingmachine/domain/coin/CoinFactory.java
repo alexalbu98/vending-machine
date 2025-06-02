@@ -25,6 +25,10 @@ public class CoinFactory {
   }
 
   public static Coin valueOf(String coinValue) {
+    if (coinValue == null) {
+      throw new IllegalArgumentException("Coin value cannot be null");
+    }
+
     return switch (coinValue) {
       case "0.05" -> nickel();
       case "0.10" -> dime();
