@@ -12,6 +12,7 @@ public class ProductInventory {
   private final Product product;
   private final int maxQuantity;
   private int quantity;
+  private final int code;
 
   public void increaseQuantity(int amount) {
     if (amount < 0) {

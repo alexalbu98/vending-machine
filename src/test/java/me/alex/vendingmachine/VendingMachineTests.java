@@ -41,8 +41,8 @@ public class VendingMachineTests {
         .changeStore(mock(ChangeStore.class))
         .build();
 
-    vendingMachine.addProductInventory(1, productInventory);
-    verify(productSystem).addProductInventory(1, productInventory);
+    vendingMachine.addProductInventory(productInventory);
+    verify(productSystem).addProductInventory(productInventory);
   }
 
   @Test

@@ -17,7 +17,7 @@ public class ProductInventoryTests {
   @BeforeEach
   void initObjects() {
     product = new Product("Soda", new BigDecimal("1.50"));
-    inventory = new ProductInventory(product, 10);
+    inventory = new ProductInventory(product, 10, 60);
   }
 
 

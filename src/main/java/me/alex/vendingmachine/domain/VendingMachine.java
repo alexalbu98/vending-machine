@@ -42,8 +42,8 @@ public class VendingMachine {
     return currentState;
   }
 
-  public void addProductInventory(int position, ProductInventory productInventory) {
-    productSystem.addProductInventory(position, productInventory);
+  public void addProductInventory(ProductInventory productInventory) {
+    productSystem.addProductInventory(productInventory);
   }
 
   public List<ProductInventory> getAvailableProducts() {

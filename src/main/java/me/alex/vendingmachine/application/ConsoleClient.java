@@ -30,7 +30,7 @@ public class ConsoleClient {
 
   private void sleep() {
     try {
-      Thread.sleep(1000);
+      Thread.sleep(500);
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
       System.err.println("Thread interrupted: " + e.getMessage());

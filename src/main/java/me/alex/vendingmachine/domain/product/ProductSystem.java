@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface ProductSystem {
 
-  void addProductInventory(int position, ProductInventory productInventory);
+  void addProductInventory(ProductInventory productInventory);
 
   Optional<ProductInventory> getProductInventory(int position);
 

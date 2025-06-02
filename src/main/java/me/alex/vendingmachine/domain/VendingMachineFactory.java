@@ -21,9 +21,9 @@ public class VendingMachineFactory {
         .currentCredit(BigDecimal.ZERO)
         .build();
 
-    vm.addProductInventory(1, new ProductInventory(pepsi(), 10, 10));
-    vm.addProductInventory(2, new ProductInventory(coke(), 10, 10));
-    vm.addProductInventory(3, new ProductInventory(water(), 10, 10));
+    vm.addProductInventory(new ProductInventory(pepsi(), 10, 10, 60));
+    vm.addProductInventory(new ProductInventory(coke(), 10, 10, 61));
+    vm.addProductInventory(new ProductInventory(water(), 10, 10, 62));
 
     vm.setState(new IdleState(vm));
     return vm;

@@ -7,21 +7,20 @@ import java.util.Optional;
 
 public class InMemoryProductSystem implements ProductSystem {
 
-  private final Integer availableProduct;
+  private Integer maxAllowedProducts;
   private final Map<Integer, ProductInventory> products;
 
-  public InMemoryProductSystem(Integer availableProduct) {
-    this.availableProduct = availableProduct;
+  public InMemoryProductSystem(Integer maxAllowedProducts) {
+    this.maxAllowedProducts = maxAllowedProducts;
     this.products = new HashMap<>();
   }
 
-  public void addProductInventory(int position, ProductInventory productInventory) {
-    if (position <= 0 || position > availableProduct) {
-      throw new IllegalArgumentException(
-          "Product system position out of bounds! Available slots from 1 to "
-              + availableProduct);
+  public void addProductInventory(ProductInventory productInventory) {
+    if (products.keySet().size() + 1 > maxAllowedProducts) {
+      throw new IllegalStateException(
+          "Cannot add more products than available slots: " + maxAllowedProducts);
     }
-    products.put(position, productInventory);
+    products.put(productInventory.getCode(), productInventory);
   }
 
   public Optional<ProductInventory> getProductInventory(int position) {

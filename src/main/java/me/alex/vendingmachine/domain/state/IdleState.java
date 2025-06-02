@@ -19,8 +19,8 @@ public class IdleState implements VendingMachineState {
   @Override
   public List<String> getAvailableOptions() {
     return List.of(
-        "Insert coins to start! Accepted coins are: " + vendingMachine.getAvailableCoins(),
-        "Write 'card' to pay by credit card");
+        "Insert coins! Accepted coins are: " + vendingMachine.getAvailableCoins(),
+        "Type 'card' to pay by credit card");
   }
 
   @Override
