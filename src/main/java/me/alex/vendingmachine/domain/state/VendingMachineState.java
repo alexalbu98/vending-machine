@@ -1,8 +1,12 @@
 package me.alex.vendingmachine.domain.state;
 
+import java.util.List;
+
 public interface VendingMachineState {
 
-  void waitForInput();
+  List<String> getAvailableOptions();
   void displayStatus();
   void displayOffer();
+  void displayError();
+  void doAction();
 }

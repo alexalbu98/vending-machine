@@ -1,5 +1,6 @@
 package me.alex.vendingmachine.domain;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -13,17 +14,21 @@ import me.alex.vendingmachine.domain.state.VendingMachineState;
 @Builder
 public class VendingMachine {
 
-  private VendingMachineState initialState;
+  private VendingMachineState currentState;
   private final ProductSystem productSystem;
   private final CoinReader coinReader;
   private final ChangeStore changeStore;
 
   public void setState(VendingMachineState newState) {
-    this.initialState = newState;
+    this.currentState = newState;
   }
 
   public void addProductInventory(int position, ProductInventory productInventory) {
     productSystem.addProductInventory(position, productInventory);
+  }
+
+  public List<String> getAvailableOptions(){
+    return  currentState.getAvailableOptions();
   }
 
   //TODO define vending machine actions
