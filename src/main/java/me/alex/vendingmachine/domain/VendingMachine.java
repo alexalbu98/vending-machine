@@ -2,17 +2,19 @@ package me.alex.vendingmachine.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import me.alex.vendingmachine.domain.coin.CoinReader;
 import me.alex.vendingmachine.domain.product.ProductSystem;
 import me.alex.vendingmachine.state.VendingMachineState;
 
 @AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Builder
 public class VendingMachine {
 
   private VendingMachineState initialState;
-  private ProductSystem productSystem;
+  private final ProductSystem productSystem;
+  private final CoinReader coinReader;
 
   public void changeState(VendingMachineState newState) {
     this.initialState = newState;
