@@ -1,4 +1,4 @@
-package me.alex.vendingmachine;
+package me.alex.vendingmachine.state;
 
 import static me.alex.vendingmachine.domain.product.ProductFactory.coke;
 import static me.alex.vendingmachine.domain.product.ProductFactory.pepsi;
