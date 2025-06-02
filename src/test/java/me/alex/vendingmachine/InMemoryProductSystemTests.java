@@ -5,20 +5,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import me.alex.vendingmachine.domain.product.InMemoryProductSystem;
 import me.alex.vendingmachine.domain.product.Product;
 import me.alex.vendingmachine.domain.product.ProductInventory;
 import me.alex.vendingmachine.domain.product.ProductSystem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ProductSystemTests {
+public class InMemoryProductSystemTests {
 
   ProductSystem productSystem;
   ProductInventory inventory;
 
   @BeforeEach
   void initObjects() {
-    productSystem = new ProductSystem(5);
+    productSystem = new InMemoryProductSystem(5);
     inventory = new ProductInventory(
         new Product("Chips", new BigDecimal("2.00")), 10);
   }

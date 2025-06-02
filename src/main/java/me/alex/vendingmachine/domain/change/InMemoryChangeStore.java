@@ -1,9 +1,9 @@
-package me.alex.vendingmachine.domain;
+package me.alex.vendingmachine.domain.change;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChangeStore {
+public class InMemoryChangeStore implements ChangeStore {
 
   private final Map<String, Integer> changeMap = new HashMap<>();
 

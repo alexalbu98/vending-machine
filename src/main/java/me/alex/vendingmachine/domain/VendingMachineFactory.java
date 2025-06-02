@@ -4,9 +4,10 @@ import static me.alex.vendingmachine.domain.product.ProductFactory.coke;
 import static me.alex.vendingmachine.domain.product.ProductFactory.pepsi;
 import static me.alex.vendingmachine.domain.product.ProductFactory.water;
 
+import me.alex.vendingmachine.domain.change.InMemoryChangeStore;
 import me.alex.vendingmachine.domain.coin.FiveCoinsReader;
+import me.alex.vendingmachine.domain.product.InMemoryProductSystem;
 import me.alex.vendingmachine.domain.product.ProductInventory;
-import me.alex.vendingmachine.domain.product.ProductSystem;
 import me.alex.vendingmachine.domain.state.IdleState;
 
 public class VendingMachineFactory {
@@ -14,8 +15,8 @@ public class VendingMachineFactory {
   public static VendingMachine beverageVendingMachine() {
     var vm = VendingMachine.builder()
         .coinReader(new FiveCoinsReader())
-        .changeStore(new ChangeStore())
-        .productSystem(new ProductSystem(3))
+        .changeStore(new InMemoryChangeStore())
+        .productSystem(new InMemoryProductSystem(3))
         .build();
 
     vm.addProductInventory(1, new ProductInventory(pepsi(), 20, 20));

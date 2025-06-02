@@ -3,17 +3,18 @@ package me.alex.vendingmachine;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import me.alex.vendingmachine.domain.ChangeStore;
+import me.alex.vendingmachine.domain.change.ChangeStore;
+import me.alex.vendingmachine.domain.change.InMemoryChangeStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ChangeStoreTests {
+public class InMemoryChangeStoreTests {
 
   ChangeStore changeStore;
 
   @BeforeEach
   void initObjects() {
-    changeStore = new ChangeStore();
+    changeStore = new InMemoryChangeStore();
   }
 
   @Test

@@ -3,7 +3,6 @@ package me.alex.vendingmachine.domain.state;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
-import me.alex.vendingmachine.domain.coin.Coin;
 
 @RequiredArgsConstructor
 public class IdleState implements VendingMachineState {
@@ -18,21 +17,7 @@ public class IdleState implements VendingMachineState {
   }
 
   @Override
-  public void displayStatus() {
-    System.out.println("Vending machine is idle. ");
-  }
-
-  @Override
-  public void displayOffer() {
-  }
-
-  @Override
-  public void displayError() {
-
-  }
-
-  @Override
   public void doAction(String input) {
-   Coin coin = vendingMachine.readCoin(input);
+    vendingMachine.insertCoin(input);
   }
 }

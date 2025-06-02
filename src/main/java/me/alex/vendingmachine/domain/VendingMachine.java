@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import me.alex.vendingmachine.domain.coin.Coin;
+import me.alex.vendingmachine.domain.change.ChangeStore;
 import me.alex.vendingmachine.domain.coin.CoinReader;
 import me.alex.vendingmachine.domain.product.ProductInventory;
 import me.alex.vendingmachine.domain.product.ProductSystem;
@@ -36,7 +36,8 @@ public class VendingMachine {
     currentState.doAction(input);
   }
 
-  public Coin readCoin(String coin) {
-    return coinReader.readCoin(coin);
+  public void insertCoin(String coin) {
+    var readCoin = coinReader.readCoin(coin);
+    changeStore.incrementChange(readCoin.name());
   }
 }
