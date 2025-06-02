@@ -17,7 +17,9 @@ public class CoinInsertedState implements VendingMachineState {
 
   @Override
   public List<String> getAvailableOptions() {
-    return List.of("Insert more coins", "Chose a product");
+    return List.of(
+        "Insert more coins! Accepted coins are: " + vendingMachine.getAvailableCoins(),
+        "Chose a product by typing its position");
   }
 
   @Override

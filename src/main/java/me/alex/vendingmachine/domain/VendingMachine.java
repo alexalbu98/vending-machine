@@ -30,6 +30,10 @@ public class VendingMachine {
     return currentState.getStateMessage();
   }
 
+  public List<String> getAvailableCoins() {
+    return coinReader.availableCoins();
+  }
+
   public BigDecimal getCurrentCredit() {
     return currentCredit;
   }
