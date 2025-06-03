@@ -21,15 +21,19 @@ public class BigCoinsFirstRefundPolicy implements RefundPolicy {
     List<Change> changes = new ArrayList<>();
 
     for (Coin coin : sortedCoins) {
-      int quantity = coinQuantities.getOrDefault(coin, 0);
-      while (quantity > 0 && remaining.compareTo(BigDecimal.ZERO) > 0) {
+      int remainingQuantity = coinQuantities.getOrDefault(coin, 0);
+      int usedQuantity = 0;
+      while (remainingQuantity > 0 && remaining.compareTo(BigDecimal.ZERO) > 0) {
         if (remaining.compareTo(coin.value()) >= 0) {
-          changes.add(new Change(coin, 1));
           remaining = remaining.subtract(coin.value());
-          quantity--;
+          usedQuantity++;
+          remainingQuantity--;
         } else {
           break;
         }
+      }
+      if (usedQuantity > 0) {
+        changes.add(new Change(coin, usedQuantity));
       }
     }
 

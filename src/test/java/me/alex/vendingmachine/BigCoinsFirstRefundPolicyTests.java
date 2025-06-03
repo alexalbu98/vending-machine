@@ -26,10 +26,10 @@ public class BigCoinsFirstRefundPolicyTests {
 
     List<Change> changes = policy.refund(coinQuantities, sum);
 
-    assertEquals(4, changes.size());
-    assertEquals(2, changes.stream().filter(c -> c.coin().name().equals("QUARTER")).count());
-    assertEquals(1, changes.stream().filter(c -> c.coin().name().equals("DIME")).count());
-    assertEquals(1, changes.stream().filter(c -> c.coin().name().equals("NICKEL")).count());
+    assertEquals(3, changes.size());
+    assertEquals(2, changes.get(0).quantity());
+    assertEquals(1, changes.get(1).quantity());
+    assertEquals(1, changes.get(2).quantity());
   }
 
   @Test
@@ -67,7 +67,6 @@ public class BigCoinsFirstRefundPolicyTests {
     BigCoinsFirstRefundPolicy policy = new BigCoinsFirstRefundPolicy();
 
     List<Change> changes = policy.refund(coinQuantities, sum);
-
     assertTrue(changes.isEmpty());
   }
 
@@ -82,7 +81,8 @@ public class BigCoinsFirstRefundPolicyTests {
 
     List<Change> changes = policy.refund(coinQuantities, sum);
 
-    assertEquals(3, changes.size());
+    assertEquals(1, changes.size());
+    assertEquals(3, changes.get(0).quantity());
     assertEquals(new BigDecimal("0.30"), changes.stream()
         .map(change -> change.coin().value().multiply(new BigDecimal(change.quantity())))
         .reduce(BigDecimal.ZERO, BigDecimal::add));

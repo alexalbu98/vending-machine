@@ -8,7 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
+import java.util.List;
 import me.alex.vendingmachine.domain.change.BigCoinsFirstRefundPolicy;
+import me.alex.vendingmachine.domain.change.Change;
 import me.alex.vendingmachine.domain.change.ChangeStore;
 import me.alex.vendingmachine.domain.change.InMemoryChangeStore;
 import me.alex.vendingmachine.domain.coin.Coin;
@@ -66,5 +68,15 @@ public class InMemoryChangeStoreTests {
   void getChangeQuantityThrowsExceptionForNonExistentCoin() {
     assertThrows(IllegalArgumentException.class,
         () -> changeStore.getChangeQuantity(new Coin("test", new BigDecimal("1.00"))));
+  }
+
+  @Test
+  void refundDecreasesCoinQuantitiesCorrectly() {
+    changeStore.addChange(dime(), 5);
+    changeStore.addChange(nickel(), 3);
+    List<Change> changes = changeStore.refund(new BigDecimal("0.25"));
+    assertEquals(2, changes.size());
+    assertEquals(3, changeStore.getChangeQuantity(dime()));
+    assertEquals(2, changeStore.getChangeQuantity(nickel()));
   }
 }
