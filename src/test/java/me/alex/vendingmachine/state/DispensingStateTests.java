@@ -24,7 +24,7 @@ public class DispensingStateTests {
     String result = state.beforeAction();
 
     verify(vendingMachine).dispenseProduct(1);
-    verify(vendingMachine).updateCredit(1);
+    verify(vendingMachine).payProduct(1);
     verify(vendingMachine).setState(any(IdleState.class));
     assertEquals("Dispensing selected product... Enjoy!", result);
   }
@@ -38,7 +38,7 @@ public class DispensingStateTests {
     String result = state.beforeAction();
 
     verify(vendingMachine).dispenseProduct(1);
-    verify(vendingMachine).updateCredit(1);
+    verify(vendingMachine).payProduct(1);
     verify(vendingMachine).setState(any(CoinInsertedState.class));
     assertEquals("Dispensing selected product... Enjoy!", result);
   }

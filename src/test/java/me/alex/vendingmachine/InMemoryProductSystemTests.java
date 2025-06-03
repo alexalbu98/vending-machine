@@ -21,7 +21,7 @@ public class InMemoryProductSystemTests {
   void initObjects() {
     productSystem = new InMemoryProductSystem(5);
     inventory = new ProductInventory(
-        new Product("Chips", new BigDecimal("2.00")), 10, 60);
+        new Product("Chips", new BigDecimal("2.00")), 10, 10, 60);
   }
 
   @Test
@@ -70,5 +70,29 @@ public class InMemoryProductSystemTests {
     assertEquals(2, productSystem.getProductInventory().size());
     assertTrue(productSystem.getProductInventory().contains(inventory));
     assertTrue(productSystem.getProductInventory().contains(inventory2));
+  }
+
+  @Test
+  void addProductInventoryThrowsExceptionWhenProductCodeAlreadyExists() {
+    productSystem.addProductInventory(inventory);
+    assertThrows(IllegalArgumentException.class,
+        () -> productSystem.addProductInventory(inventory));
+  }
+
+  @Test
+  void dispenseProductDecreasesProductQuantitySuccessfully() {
+    productSystem.addProductInventory(inventory);
+    productSystem.dispenseProduct(60);
+    assertEquals(9, productSystem.getProductInventory(60).getQuantity());
+  }
+
+  @Test
+  void dispenseProductThrowsExceptionForNonExistentProductCode() {
+    assertThrows(IllegalArgumentException.class, () -> productSystem.dispenseProduct(99));
+  }
+
+  @Test
+  void getProductInventoryListReturnsEmptyListWhenNoProductsAdded() {
+    assertTrue(productSystem.getProductInventory().isEmpty());
   }
 }

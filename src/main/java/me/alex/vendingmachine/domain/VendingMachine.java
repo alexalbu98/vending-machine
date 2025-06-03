@@ -50,9 +50,9 @@ public class VendingMachine {
     productSystem.dispenseProduct(productCode);
   }
 
-  public void updateCredit(int productCode) {
+  public void payProduct(int productCode) {
     var productInventory = productSystem.getProductInventory(productCode);
-    currentCredit = currentCredit.subtract(productInventory.getProduct().price());
+    currentCredit = getCurrentCredit().subtract(productInventory.getProduct().price());
   }
 
   public List<ProductInventory> getAvailableProducts() {
