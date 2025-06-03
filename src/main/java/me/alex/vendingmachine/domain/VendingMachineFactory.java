@@ -5,6 +5,7 @@ import static me.alex.vendingmachine.domain.product.ProductFactory.pepsi;
 import static me.alex.vendingmachine.domain.product.ProductFactory.water;
 
 import java.math.BigDecimal;
+import me.alex.vendingmachine.domain.change.BigCoinsFirstRefundPolicy;
 import me.alex.vendingmachine.domain.change.InMemoryChangeStore;
 import me.alex.vendingmachine.domain.coin.FiveCoinsReader;
 import me.alex.vendingmachine.domain.product.InMemoryProductSystem;
@@ -16,7 +17,7 @@ public class VendingMachineFactory {
   public static VendingMachine beverageVendingMachine() {
     var vm = VendingMachine.builder()
         .coinReader(new FiveCoinsReader())
-        .changeStore(new InMemoryChangeStore())
+        .changeStore(new InMemoryChangeStore(new BigCoinsFirstRefundPolicy()))
         .productSystem(new InMemoryProductSystem(3))
         .currentCredit(BigDecimal.ZERO)
         .build();

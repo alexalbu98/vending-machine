@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
+import me.alex.vendingmachine.domain.change.BigCoinsFirstRefundPolicy;
 import me.alex.vendingmachine.domain.change.ChangeStore;
 import me.alex.vendingmachine.domain.change.InMemoryChangeStore;
 import me.alex.vendingmachine.domain.coin.Coin;
@@ -20,7 +21,7 @@ public class InMemoryChangeStoreTests {
 
   @BeforeEach
   void initObjects() {
-    changeStore = new InMemoryChangeStore();
+    changeStore = new InMemoryChangeStore(new BigCoinsFirstRefundPolicy());
   }
 
   @Test
