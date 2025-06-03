@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 import me.alex.vendingmachine.domain.product.InMemoryProductSystem;
 import me.alex.vendingmachine.domain.product.Product;
 import me.alex.vendingmachine.domain.product.ProductInventory;
@@ -28,7 +27,7 @@ public class InMemoryProductSystemTests {
   @Test
   void addProductInventoryAddsProductSuccessfully() {
     productSystem.addProductInventory(inventory);
-    assertEquals(Optional.of(inventory), productSystem.getProductInventory(60));
+    assertEquals(inventory, productSystem.getProductInventory(60));
   }
 
 
@@ -51,13 +50,14 @@ public class InMemoryProductSystemTests {
 
   @Test
   void getProductInventoryReturnsEmptyForNonExistentPosition() {
-    assertEquals(Optional.empty(), productSystem.getProductInventory(99));
+    assertThrows(IllegalArgumentException.class,
+        () -> productSystem.getProductInventory(99));
   }
 
   @Test
   void getProductInventoryReturnsCorrectInventoryForExistingPosition() {
     productSystem.addProductInventory(inventory);
-    assertEquals(Optional.of(inventory), productSystem.getProductInventory(60));
+    assertEquals(inventory, productSystem.getProductInventory(60));
   }
 
   @Test

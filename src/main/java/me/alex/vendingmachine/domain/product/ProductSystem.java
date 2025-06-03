@@ -7,8 +7,10 @@ public interface ProductSystem {
 
   void addProductInventory(ProductInventory productInventory);
 
-  Optional<ProductInventory> getProductInventory(int productCode);
+  ProductInventory getProductInventory(int productCode);
 
   public List<ProductInventory> getProductInventory();
+
+  public void dispenseProduct(int productCode);
 
 }

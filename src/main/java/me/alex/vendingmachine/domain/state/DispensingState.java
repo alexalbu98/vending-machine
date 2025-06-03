@@ -23,7 +23,7 @@ public class DispensingState implements VendingMachineState {
 
   @Override
   public String beforeAction() {
-    vendingMachine.decreaseProductInventory(productCode);
+    vendingMachine.dispenseProduct(productCode);
     vendingMachine.updateCredit(productCode);
     if (vendingMachine.getCurrentCredit().compareTo(BigDecimal.ZERO) == 0) {
       vendingMachine.setState(new IdleState(vendingMachine));

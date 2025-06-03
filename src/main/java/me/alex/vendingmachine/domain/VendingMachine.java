@@ -46,15 +46,12 @@ public class VendingMachine {
     productSystem.addProductInventory(productInventory);
   }
 
-  public void decreaseProductInventory(int productCode) {
-    var productInventory = productSystem.getProductInventory(productCode)
-        .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-    productInventory.decreaseQuantity();
+  public void dispenseProduct(int productCode) {
+    productSystem.dispenseProduct(productCode);
   }
 
   public void updateCredit(int productCode) {
-    var productInventory = productSystem.getProductInventory(productCode)
-        .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+    var productInventory = productSystem.getProductInventory(productCode);
     currentCredit = currentCredit.subtract(productInventory.getProduct().price());
   }
 

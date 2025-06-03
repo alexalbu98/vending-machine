@@ -3,7 +3,6 @@ package me.alex.vendingmachine.domain.product;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class InMemoryProductSystem implements ProductSystem {
 
@@ -27,14 +26,20 @@ public class InMemoryProductSystem implements ProductSystem {
     products.put(productInventory.getCode(), productInventory);
   }
 
-  public Optional<ProductInventory> getProductInventory(int productCode) {
+  public ProductInventory getProductInventory(int productCode) {
     if (products.containsKey(productCode)) {
-      return Optional.ofNullable(products.get(productCode));
+      return products.get(productCode);
     }
-    return Optional.empty();
+    throw new IllegalArgumentException("Product with code " + productCode + " not found.");
   }
 
   public List<ProductInventory> getProductInventory() {
     return products.values().stream().toList();
+  }
+
+  @Override
+  public void dispenseProduct(int productCode) {
+    var inventory = getProductInventory(productCode);
+    inventory.decreaseQuantity();
   }
 }
