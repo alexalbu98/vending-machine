@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import me.alex.vendingmachine.domain.VendingMachine;
 import me.alex.vendingmachine.domain.change.ChangeStore;
-import me.alex.vendingmachine.domain.coin.Coin;
 import me.alex.vendingmachine.domain.coin.CoinReader;
 import me.alex.vendingmachine.domain.product.ProductInventory;
 import me.alex.vendingmachine.domain.product.ProductSystem;
@@ -74,7 +73,7 @@ public class VendingMachineTests {
   @Test
   void doActionDelegatesToCurrentState() {
     vendingMachine.doAction("Input");
-    verify(currentState).doAction("Input");
+    verify(currentState).inputAction("Input");
   }
 
   @Test

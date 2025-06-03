@@ -16,12 +16,12 @@ import org.junit.jupiter.api.Test;
 public class DispensingStateTests {
 
   @Test
-  void beforeActionDispensesProductAndTransitionsToIdleStateWhenCreditIsZero() {
+  void stateActionDispensesProductAndTransitionsToIdleStateWhenCreditIsZero() {
     VendingMachine vendingMachine = mock(VendingMachine.class);
     when(vendingMachine.getCurrentCredit()).thenReturn(BigDecimal.ZERO);
     DispensingState state = new DispensingState(vendingMachine, 1);
 
-    String result = state.beforeAction();
+    String result = state.stateAction();
 
     verify(vendingMachine).dispenseProduct(1);
     verify(vendingMachine).payProduct(1);
@@ -30,12 +30,12 @@ public class DispensingStateTests {
   }
 
   @Test
-  void beforeActionDispensesProductAndTransitionsToCoinInsertedStateWhenCreditIsNonZero() {
+  void stateActionDispensesProductAndTransitionsToCoinInsertedStateWhenCreditIsNonZero() {
     VendingMachine vendingMachine = mock(VendingMachine.class);
     when(vendingMachine.getCurrentCredit()).thenReturn(new BigDecimal("1.00"));
     DispensingState state = new DispensingState(vendingMachine, 1);
 
-    String result = state.beforeAction();
+    String result = state.stateAction();
 
     verify(vendingMachine).dispenseProduct(1);
     verify(vendingMachine).payProduct(1);

@@ -39,8 +39,13 @@ public class InMemoryChangeStore implements ChangeStore {
   }
 
   @Override
-  public List<Change> returnChange(BigDecimal sum) {
-    return refundPolicy.refund(coinMap, sum);
+  public List<Change> refund(BigDecimal sum) {
+    var changeList = refundPolicy.refund(coinMap, sum);
+    changeList.forEach(c -> {
+      var newQuantity = coinMap.get(c.coin()) - c.quantity();
+      coinMap.put(c.coin(), newQuantity);
+    });
+    return changeList;
   }
 
 }

@@ -33,10 +33,6 @@ public class BigCoinsFirstRefundPolicy implements RefundPolicy {
       }
     }
 
-    if (remaining.compareTo(BigDecimal.ZERO) > 0) {
-      throw new IllegalStateException("Cannot return exact change for the given sum!");
-    }
-
     return changes;
   }
 

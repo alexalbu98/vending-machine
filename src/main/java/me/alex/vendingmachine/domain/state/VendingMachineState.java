@@ -10,9 +10,9 @@ public interface VendingMachineState {
 
   List<String> getAvailableOptions();
 
-  String beforeAction();
+  String stateAction();
 
-  void doAction(String input);
+  void inputAction(String input);
 
   default String formatProductsAsString(VendingMachine vendingMachine) {
     return vendingMachine

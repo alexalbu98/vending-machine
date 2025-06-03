@@ -52,7 +52,10 @@ public class BigCoinsFirstRefundPolicyTests {
     BigDecimal sum = new BigDecimal("0.50");
     BigCoinsFirstRefundPolicy policy = new BigCoinsFirstRefundPolicy();
 
-    assertThrows(IllegalStateException.class, () -> policy.refund(coinQuantities, sum));
+    var change = policy.refund(coinQuantities, sum);
+    assertEquals(2, change.size());
+    assertEquals("QUARTER", change.get(0).coin().name());
+    assertEquals("DIME", change.get(1).coin().name());
   }
 
   @Test

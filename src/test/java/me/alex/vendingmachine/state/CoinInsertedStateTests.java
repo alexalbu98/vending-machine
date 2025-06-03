@@ -39,38 +39,38 @@ public class CoinInsertedStateTests {
   void doActionTransitionsToDispensingStateForValidProductCode() {
     doReturn(new BigDecimal("2.00")).when(vendingMachine).getCurrentCredit();
     CoinInsertedState state = new CoinInsertedState(vendingMachine);
-    state.doAction("60");
+    state.inputAction("60");
 
     verify(vendingMachine).setState(any(DispensingState.class));
   }
 
   @Test
-  void doActionDoesNotTransitionsToDispensingStateWhenInsufficientFunds() {
+  void inputActionDoesNotTransitionsToDispensingStateWhenInsufficientFunds() {
     doReturn(new BigDecimal("0.05")).when(vendingMachine).getCurrentCredit();
     CoinInsertedState state = new CoinInsertedState(vendingMachine);
-    assertThrows(IllegalStateException.class, () -> state.doAction("60"));
+    assertThrows(IllegalStateException.class, () -> state.inputAction("60"));
   }
 
   @Test
-  void doActionDoesNotTransitionsToDispensingStateWhenProductOutOfStock() {
+  void inputActionDoesNotTransitionsToDispensingStateWhenProductOutOfStock() {
     doReturn(new BigDecimal("2.00")).when(vendingMachine).getCurrentCredit();
     when(vendingMachine.getAvailableProducts()).thenReturn(List.of(
         new ProductInventory(pepsi(), 10, 0, 60)));
     CoinInsertedState state = new CoinInsertedState(vendingMachine);
-    assertThrows(IllegalStateException.class, () -> state.doAction("60"));
+    assertThrows(IllegalStateException.class, () -> state.inputAction("60"));
   }
 
   @Test
   void doActionTransitionsToRefundingStateForRefundInput() {
     CoinInsertedState state = new CoinInsertedState(vendingMachine);
-    state.doAction("R");
+    state.inputAction("R");
     verify(vendingMachine).setState(any(RefundingState.class));
   }
 
   @Test
   void doActionInsertsCoinForValidCoinInput() {
     CoinInsertedState state = new CoinInsertedState(vendingMachine);
-    state.doAction("QUARTER");
+    state.inputAction("QUARTER");
     verify(vendingMachine).insertCoin("QUARTER");
   }
 
@@ -79,7 +79,7 @@ public class CoinInsertedStateTests {
     CoinInsertedState state = new CoinInsertedState(vendingMachine);
     doThrow(new IllegalArgumentException("Invalid coin")).when(vendingMachine)
         .insertCoin(anyString());
-    assertThrows(IllegalArgumentException.class, () -> state.doAction("INVALID_COIN"));
+    assertThrows(IllegalArgumentException.class, () -> state.inputAction("INVALID_COIN"));
   }
 
   @Test

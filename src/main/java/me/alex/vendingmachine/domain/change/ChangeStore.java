@@ -14,5 +14,5 @@ public interface ChangeStore {
 
   int getChangeQuantity(Coin coin);
 
-  List<Change> returnChange(BigDecimal sum);
+  List<Change> refund(BigDecimal sum);
 }

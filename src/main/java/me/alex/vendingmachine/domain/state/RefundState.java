@@ -1,11 +1,13 @@
 package me.alex.vendingmachine.domain.state;
 
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
+import me.alex.vendingmachine.domain.change.Change;
 
 @RequiredArgsConstructor
-public class RefundState implements VendingMachineState{
+public class RefundState implements VendingMachineState {
 
   private final VendingMachine vendingMachine;
 
@@ -20,13 +22,35 @@ public class RefundState implements VendingMachineState{
   }
 
   @Override
-  public String beforeAction() {
-    var credit = vendingMachine.getCurrentCredit();
-    return "";
+  public String stateAction() {
+    var change = vendingMachine.refund();
+    if (vendingMachine.getCurrentCredit().equals(BigDecimal.ZERO)) {
+      vendingMachine.setState(new CoinInsertedState(vendingMachine));
+    } else {
+      vendingMachine.setState(new IdleState(vendingMachine));
+    }
+    return formatRefundMessage(change);
+  }
+
+  private String formatRefundMessage(List<Change> change) {
+    StringBuilder stringBuilder = new StringBuilder();
+    change.forEach(c ->
+        stringBuilder.append("Refunded ")
+            .append(c.quantity())
+            .append(" coins of type ")
+            .append(c.coin().value()).append("\n")
+    );
+    if (vendingMachine.getCurrentCredit().equals(BigDecimal.ZERO)) {
+      stringBuilder.append("No credit left to refund.");
+    } else {
+      stringBuilder.append("Could not refund all credit, not enough change! Remaining credit: ")
+          .append(vendingMachine.getCurrentCredit());
+    }
+    return stringBuilder.toString();
   }
 
   @Override
-  public void doAction(String input) {
+  public void inputAction(String input) {
 
   }
 }

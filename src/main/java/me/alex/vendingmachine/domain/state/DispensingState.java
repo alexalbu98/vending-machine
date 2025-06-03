@@ -22,7 +22,7 @@ public class DispensingState implements VendingMachineState {
   }
 
   @Override
-  public String beforeAction() {
+  public String stateAction() {
     vendingMachine.dispenseProduct(productCode);
     vendingMachine.payProduct(productCode);
     if (vendingMachine.getCurrentCredit().compareTo(BigDecimal.ZERO) == 0) {
@@ -34,7 +34,7 @@ public class DispensingState implements VendingMachineState {
   }
 
   @Override
-  public void doAction(String input) {
+  public void inputAction(String input) {
 
   }
 }

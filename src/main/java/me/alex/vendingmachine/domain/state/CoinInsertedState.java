@@ -26,12 +26,12 @@ public class CoinInsertedState implements VendingMachineState {
   }
 
   @Override
-  public String beforeAction() {
+  public String stateAction() {
     return "";
   }
 
   @Override
-  public void doAction(String input) {
+  public void inputAction(String input) {
     if (isProductCode(input)) {
       verifyCredit(input);
       verifyProductQuantity(input);

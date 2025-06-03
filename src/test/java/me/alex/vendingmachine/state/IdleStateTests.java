@@ -51,22 +51,22 @@ public class IdleStateTests {
   }
 
   @Test
-  void doActionTransitionsToCoinInsertedStateWhenCoinIsInserted() {
+  void inputActionTransitionsToCoinInsertedStateWhenCoinIsInserted() {
     VendingMachine vendingMachine = mock(VendingMachine.class);
     IdleState idleState = new IdleState(vendingMachine);
 
-    idleState.doAction("QUARTER");
+    idleState.inputAction("QUARTER");
 
     verify(vendingMachine).insertCoin("QUARTER");
     verify(vendingMachine).setState(any(CoinInsertedState.class));
   }
 
   @Test
-  void doActionThrowsExceptionForInvalidInput() {
+  void inputActionThrowsExceptionForInvalidInput() {
     VendingMachine vendingMachine = mock(VendingMachine.class);
     doThrow(new IllegalArgumentException("Invalid coin")).when(vendingMachine).insertCoin(anyString());
 
     IdleState idleState = new IdleState(vendingMachine);
-    assertThrows(IllegalArgumentException.class, () -> idleState.doAction("INVALID"));
+    assertThrows(IllegalArgumentException.class, () -> idleState.inputAction("INVALID"));
   }
 }
