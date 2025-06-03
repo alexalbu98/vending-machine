@@ -1,5 +1,6 @@
 package me.alex.vendingmachine;
 
+import static me.alex.vendingmachine.domain.coin.CoinFactory.dime;
 import static me.alex.vendingmachine.domain.product.ProductFactory.coke;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -78,10 +79,10 @@ public class VendingMachineTests {
 
   @Test
   void insertCoinUpdatesCreditAndIncrementsChangeStore() {
-    when(coinReader.readCoin("QUARTER")).thenReturn(new Coin("QUARTER", new BigDecimal("0.25")));
-    vendingMachine.insertCoin("QUARTER");
-    verify(changeStore).incrementChange("QUARTER");
-    assertEquals(new BigDecimal("2.25"), vendingMachine.getCurrentCredit());
+    when(coinReader.readCoin("DIME")).thenReturn(dime());
+    vendingMachine.insertCoin("DIME");
+    verify(changeStore).incrementChange(dime());
+    assertEquals(new BigDecimal("2.10"), vendingMachine.getCurrentCredit());
   }
 
   @Test

@@ -1,12 +1,14 @@
 package me.alex.vendingmachine.domain.change;
 
+import me.alex.vendingmachine.domain.coin.Coin;
+
 public interface ChangeStore {
 
-  void addChange(String coinName, int quantity);
+  void addChange(Coin coin, int quantity);
 
-  void incrementChange(String coinName);
+  void incrementChange(Coin coin);
 
-  void decrementChange(String coinName);
+  void decrementChange(Coin coin);
 
-  int getChangeQuantity(String coinName);
+  int getChangeQuantity(Coin coin);
 }

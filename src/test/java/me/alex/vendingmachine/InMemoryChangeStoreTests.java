@@ -1,10 +1,16 @@
 package me.alex.vendingmachine;
 
+import static me.alex.vendingmachine.domain.coin.CoinFactory.coin;
+import static me.alex.vendingmachine.domain.coin.CoinFactory.dime;
+import static me.alex.vendingmachine.domain.coin.CoinFactory.halfCoin;
+import static me.alex.vendingmachine.domain.coin.CoinFactory.nickel;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.math.BigDecimal;
 import me.alex.vendingmachine.domain.change.ChangeStore;
 import me.alex.vendingmachine.domain.change.InMemoryChangeStore;
+import me.alex.vendingmachine.domain.coin.Coin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,34 +25,35 @@ public class InMemoryChangeStoreTests {
 
   @Test
   void addChangeIncreasesQuantityForExistingCoin() {
-    changeStore.addChange("PENNY", 5);
-    changeStore.addChange("PENNY", 3);
-    assertEquals(8, changeStore.getChangeQuantity("PENNY"));
+    changeStore.addChange(nickel(), 5);
+    changeStore.addChange(nickel(), 3);
+    assertEquals(8, changeStore.getChangeQuantity(nickel()));
   }
 
   @Test
   void incrementChangeIncreasesQuantityByOne() {
-    changeStore.addChange("DIME", 2);
-    changeStore.incrementChange("DIME");
-    assertEquals(3, changeStore.getChangeQuantity("DIME"));
+    changeStore.addChange(dime(), 2);
+    changeStore.incrementChange(dime());
+    assertEquals(3, changeStore.getChangeQuantity(dime()));
   }
 
   @Test
   void decrementChangeDecreasesQuantityByOne() {
-    changeStore.addChange("QUARTER", 3);
-    changeStore.decrementChange("QUARTER");
-    assertEquals(2, changeStore.getChangeQuantity("QUARTER"));
+    changeStore.addChange(halfCoin(), 3);
+    changeStore.decrementChange(halfCoin());
+    assertEquals(2, changeStore.getChangeQuantity(halfCoin()));
   }
 
   @Test
   void decrementChangeThrowsExceptionWhenQuantityIsZero() {
-    changeStore.addChange("HALF_DOLLAR", 0);
-    assertThrows(IllegalStateException.class, () -> changeStore.decrementChange("HALF_DOLLAR"));
+    changeStore.addChange(coin(), 0);
+    assertThrows(IllegalStateException.class, () -> changeStore.decrementChange(coin()));
   }
 
   @Test
   void decrementChangeThrowsExceptionForNonExistentCoin() {
-    assertThrows(IllegalStateException.class, () -> changeStore.decrementChange("DOLLAR"));
+    assertThrows(IllegalStateException.class,
+        () -> changeStore.decrementChange(new Coin("test", new BigDecimal("1.00"))));
   }
 
   @Test
@@ -56,6 +63,7 @@ public class InMemoryChangeStoreTests {
 
   @Test
   void getChangeQuantityThrowsExceptionForNonExistentCoin() {
-    assertThrows(IllegalArgumentException.class, () -> changeStore.getChangeQuantity("BITCOIN"));
+    assertThrows(IllegalArgumentException.class,
+        () -> changeStore.getChangeQuantity(new Coin("test", new BigDecimal("1.00"))));
   }
 }
