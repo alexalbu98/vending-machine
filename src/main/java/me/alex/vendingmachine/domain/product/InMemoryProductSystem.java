@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public class InMemoryProductSystem implements ProductSystem {
 
-  private Integer maxAllowedProducts;
+  private final Integer maxAllowedProducts;
   private final Map<Integer, ProductInventory> products;
 
   public InMemoryProductSystem(Integer maxAllowedProducts) {
@@ -16,16 +16,20 @@ public class InMemoryProductSystem implements ProductSystem {
   }
 
   public void addProductInventory(ProductInventory productInventory) {
-    if (products.keySet().size() + 1 > maxAllowedProducts) {
+    if (products.size() + 1 > maxAllowedProducts) {
       throw new IllegalStateException(
-          "Cannot add more products than available slots: " + maxAllowedProducts);
+          "Cannot add more products than available product system slots: " + maxAllowedProducts);
+    }
+    if (products.containsKey(productInventory.getCode())) {
+      throw new IllegalArgumentException("Product with code "
+          + productInventory.getCode() + " already exists in the system.");
     }
     products.put(productInventory.getCode(), productInventory);
   }
 
-  public Optional<ProductInventory> getProductInventory(int position) {
-    if (products.containsKey(position)) {
-      return Optional.ofNullable(products.get(position));
+  public Optional<ProductInventory> getProductInventory(int productCode) {
+    if (products.containsKey(productCode)) {
+      return Optional.ofNullable(products.get(productCode));
     }
     return Optional.empty();
   }
