@@ -6,6 +6,6 @@ public record Coin(String name, BigDecimal value) implements Comparable<Coin> {
 
   @Override
   public int compareTo(Coin coin) {
-    return this.value.compareTo(coin.value);
+    return coin.value.compareTo(this.value);
   }
 }
