@@ -76,4 +76,10 @@ public class VendingMachine {
     changeStore.incrementChange(readCoin.name());
     this.currentCredit = this.currentCredit.add(readCoin.value());
   }
+
+  public void insertCoin(String coin, int quantity) {
+    for (int i = 0; i < quantity; i++) {
+      insertCoin(coin);
+    }
+  }
 }
