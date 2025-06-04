@@ -2,11 +2,13 @@ package me.alex.vendingmachine.domain;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import me.alex.vendingmachine.domain.change.Change;
 import me.alex.vendingmachine.domain.change.ChangeStore;
+import me.alex.vendingmachine.domain.coin.Coin;
 import me.alex.vendingmachine.domain.coin.CoinReader;
 import me.alex.vendingmachine.domain.product.ProductInventory;
 import me.alex.vendingmachine.domain.product.ProductSystem;
@@ -84,7 +86,10 @@ public class VendingMachine {
   public void insertCoin(String coin) {
     var readCoin = coinReader.readCoin(coin);
     changeStore.incrementChange(readCoin);
-    this.currentCredit = this.currentCredit.add(readCoin.value());
+  }
+
+  public void incrementCredit(String amount) {
+    this.currentCredit = this.currentCredit.add(new BigDecimal(amount));
   }
 
   public void insertCoin(String coin, int quantity) {
@@ -121,5 +126,18 @@ public class VendingMachine {
 
   public void updateProductQuantity(int productCode, Integer productQuantity) {
     productSystem.updateProductQuantity(productCode, productQuantity);
+  }
+
+  public Map<Coin, Integer> getCoins() {
+    return changeStore.getCoins();
+  }
+
+  public void emptyAllCoins() {
+    changeStore.removeCoins();
+  }
+
+  public void removeCoin(String coinValue, int coinQuantity) {
+    var readCoin = coinReader.readCoin(coinValue);
+    changeStore.removeCoin(readCoin, coinQuantity);
   }
 }

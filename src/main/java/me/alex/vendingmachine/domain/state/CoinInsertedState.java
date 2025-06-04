@@ -50,6 +50,7 @@ public class CoinInsertedState implements VendingMachineState {
       return;
     }
     vendingMachine.insertCoin(input);
+    vendingMachine.incrementCredit(input);
   }
 
   private void verifyProductQuantity(String productCode) {

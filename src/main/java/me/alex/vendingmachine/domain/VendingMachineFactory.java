@@ -36,7 +36,6 @@ public class VendingMachineFactory {
     vm.insertCoin("1.00", 7);
     vm.insertCoin("2.00", 6);
 
-    vm.setCurrentCredit(BigDecimal.ZERO);
     vm.setState(new IdleState(vm));
 
     return vm;

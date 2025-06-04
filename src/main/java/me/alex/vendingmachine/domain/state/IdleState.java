@@ -42,6 +42,7 @@ public class IdleState implements VendingMachineState {
       return;
     }
     vendingMachine.insertCoin(input);
+    vendingMachine.incrementCredit(input);
     vendingMachine.setState(new CoinInsertedState(vendingMachine));
   }
 }

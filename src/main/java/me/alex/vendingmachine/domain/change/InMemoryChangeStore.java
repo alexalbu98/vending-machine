@@ -1,6 +1,7 @@
 package me.alex.vendingmachine.domain.change;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -53,6 +54,27 @@ public class InMemoryChangeStore implements ChangeStore {
   @Override
   public boolean isLowOnChange() {
     return isChangeLowPolicy.isChangeLow(coinMap);
+  }
+
+  @Override
+  public Map<Coin, Integer> getCoins() {
+    return Collections.unmodifiableMap(this.coinMap);
+  }
+
+  @Override
+  public void removeCoins() {
+    coinMap.clear();
+  }
+
+  @Override
+  public void removeCoin(Coin coin, int coinQuantity) {
+    if (coinQuantity <= 0) {
+      throw new IllegalArgumentException("Coin quantity must be greater than zero.");
+    }
+    if (!coinMap.containsKey(coin) || coinMap.get(coin) < coinQuantity) {
+      throw new IllegalStateException("Not enough coins to remove: " + coin.name());
+    }
+    coinMap.put(coin, coinMap.get(coin) - coinQuantity);
   }
 
 }

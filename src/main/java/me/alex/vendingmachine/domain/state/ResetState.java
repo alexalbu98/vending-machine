@@ -13,6 +13,7 @@ public class ResetState implements VendingMachineState {
   private final static String EXIT = "exit";
   private final static String CHANGE_PRICE = "price";
   private final static String CHANGE_QUANTITY = "qty";
+  private final static String ADD_COIN = "coin";
 
   @Override
   public String getStateMessage() {
@@ -24,6 +25,7 @@ public class ResetState implements VendingMachineState {
     return List.of("Type 'default' to reset the vending machine to default state",
         "Type 'price' to change product price",
         "Type 'qty' to change product quantity",
+        "Type 'coin' to add coins for change to the vending machine",
         "Type 'exit' to exit the reset mode");
   }
 
@@ -34,20 +36,20 @@ public class ResetState implements VendingMachineState {
 
   @Override
   public void inputAction(String input) {
-    if (input.equals(DEFAULT)) {
-      var factorySettings = VendingMachineFactory.vendingMachine(
-          vendingMachine.getVendingMachineType());
-      vendingMachine.reset(factorySettings);
-      vendingMachine.setState(new IdleState(vendingMachine));
-    }
-    if (input.equals(EXIT)) {
-      vendingMachine.setState(new IdleState(vendingMachine));
-    }
-    if (input.equals(CHANGE_PRICE)) {
-      vendingMachine.setState(new ChangeProductPriceState(vendingMachine));
-    }
-    if (input.equals(CHANGE_QUANTITY)) {
-      vendingMachine.setState(new ChangeProductQuantityState(vendingMachine));
+    switch (input) {
+      case DEFAULT -> {
+        var factorySettings = VendingMachineFactory.vendingMachine(
+            vendingMachine.getVendingMachineType());
+        vendingMachine.reset(factorySettings);
+        vendingMachine.setState(new IdleState(vendingMachine));
+      }
+      case EXIT -> vendingMachine.setState(new IdleState(vendingMachine));
+      case CHANGE_PRICE -> vendingMachine.setState(new ChangeProductPriceState(vendingMachine));
+      case CHANGE_QUANTITY ->
+          vendingMachine.setState(new ChangeProductQuantityState(vendingMachine));
+      case ADD_COIN -> vendingMachine.setState(new AddCoinState(vendingMachine));
+      default ->
+          throw new IllegalArgumentException("Invalid input: " + input + ". Not a known command.");
     }
   }
 }
