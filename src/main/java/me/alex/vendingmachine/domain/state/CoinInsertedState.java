@@ -42,6 +42,10 @@ public class CoinInsertedState implements VendingMachineState {
       vendingMachine.setState(new RefundingState(vendingMachine));
       return;
     }
+    if (input.equals(RESET_COMMAND)) {
+      vendingMachine.setState(new ResetState(vendingMachine));
+      return;
+    }
     vendingMachine.insertCoin(input);
   }
 

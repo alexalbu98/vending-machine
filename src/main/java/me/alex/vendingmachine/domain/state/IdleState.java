@@ -34,6 +34,10 @@ public class IdleState implements VendingMachineState {
       //TODO implement card payment
       return;
     }
+    if (input.equals(RESET_COMMAND)) {
+      vendingMachine.setState(new ResetState(vendingMachine));
+      return;
+    }
     vendingMachine.insertCoin(input);
     vendingMachine.setState(new CoinInsertedState(vendingMachine));
   }
