@@ -10,6 +10,9 @@ public class ResetState implements VendingMachineState {
 
   private final VendingMachine vendingMachine;
   private final static String DEFAULT = "default";
+  private final static String EXIT = "exit";
+  private final static String CHANGE_PRICE = "price";
+  private final static String CHANGE_QUANTITY = "qty";
 
   @Override
   public String getStateMessage() {
@@ -33,7 +36,16 @@ public class ResetState implements VendingMachineState {
       var factorySettings = VendingMachineFactory.vendingMachine(
           vendingMachine.getVendingMachineType());
       vendingMachine.reset(factorySettings);
+      vendingMachine.setState(new IdleState(vendingMachine));
     }
-    vendingMachine.setState(new IdleState(vendingMachine));
+    if (input.equals(EXIT)) {
+      vendingMachine.setState(new IdleState(vendingMachine));
+    }
+    if (input.equals(CHANGE_PRICE)){
+      vendingMachine.setState(new ChangeProductPriceState(vendingMachine));
+    }
+    if( input.equals(CHANGE_QUANTITY)) {
+      vendingMachine.setState(new ChangeProductQuantityState(vendingMachine));
+    }
   }
 }
