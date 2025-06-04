@@ -72,4 +72,8 @@ public class ProductInventory {
   public void setProduct(Product product) {
     this.product = product;
   }
+
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
+  }
 }

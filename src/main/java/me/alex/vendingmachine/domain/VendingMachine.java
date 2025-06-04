@@ -118,4 +118,8 @@ public class VendingMachine {
   public void updateProductPrice(int productCode, BigDecimal newPrice) {
     productSystem.updateProductPrice(productCode, newPrice);
   }
+
+  public void updateProductQuantity(int productCode, Integer productQuantity) {
+    productSystem.updateProductQuantity(productCode, productQuantity);
+  }
 }

@@ -14,4 +14,6 @@ public interface ProductSystem {
   void dispenseProduct(int productCode);
 
   void updateProductPrice(int productCode, BigDecimal newPrice);
+
+  void updateProductQuantity(int productCode, Integer productQuantity);
 }

@@ -16,7 +16,7 @@ public class ChangeProductQuantityState implements VendingMachineState {
 
   @Override
   public List<String> getAvailableOptions() {
-    return List.of("Type <product code>=<quantity> to change its quantity");
+    return List.of("Type <product code>=<quantity> to change its quantity:");
   }
 
   @Override
@@ -26,6 +26,15 @@ public class ChangeProductQuantityState implements VendingMachineState {
 
   @Override
   public void inputAction(String input) {
+    vendingMachine.updateProductQuantity(getProductCode(input), getProductQuantity(input));
+    vendingMachine.setState(new ResetState(vendingMachine));
+  }
 
+  private int getProductCode(String input) {
+    return Integer.parseInt(input.split("=")[0].trim());
+  }
+
+  private Integer getProductQuantity(String input) {
+    return Integer.parseInt(input.split("=")[1].trim());
   }
 }

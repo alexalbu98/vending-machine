@@ -46,7 +46,7 @@ public class InMemoryProductSystem implements ProductSystem {
 
   @Override
   public void updateProductPrice(int productCode, BigDecimal newPrice) {
-    if(newPrice.compareTo(BigDecimal.ZERO) <= 0) {
+    if (newPrice.compareTo(BigDecimal.ZERO) <= 0) {
       throw new IllegalArgumentException("New price must be greater than zero.");
     }
     var inventory = products.get(productCode);
@@ -55,6 +55,19 @@ public class InMemoryProductSystem implements ProductSystem {
     }
     var product = inventory.getProduct();
     inventory.setProduct(new Product(product.name(), newPrice));
+    products.put(productCode, inventory);
+  }
+
+  @Override
+  public void updateProductQuantity(int productCode, Integer productQuantity) {
+    if (productQuantity <= 0) {
+      throw new IllegalArgumentException("New quantity must be greater than zero.");
+    }
+    var inventory = products.get(productCode);
+    if (inventory == null) {
+      throw new IllegalArgumentException("Product with code " + productCode + " not found.");
+    }
+    inventory.setQuantity(productQuantity);
     products.put(productCode, inventory);
   }
 }
