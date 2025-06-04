@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import me.alex.vendingmachine.domain.change.Change;
 import me.alex.vendingmachine.domain.change.ChangeStore;
 import me.alex.vendingmachine.domain.coin.CoinReader;
@@ -13,18 +13,23 @@ import me.alex.vendingmachine.domain.product.ProductSystem;
 import me.alex.vendingmachine.domain.state.VendingMachineState;
 
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Builder
 public class VendingMachine {
 
   private VendingMachineState currentState;
-  private final ProductSystem productSystem;
-  private final CoinReader coinReader;
-  private final ChangeStore changeStore;
+  private VendingMachineType vendingMachineType;
+  private ProductSystem productSystem;
+  private CoinReader coinReader;
+  private ChangeStore changeStore;
   private BigDecimal currentCredit;
 
   public void setState(VendingMachineState newState) {
     this.currentState = newState;
+  }
+
+  public VendingMachineType getVendingMachineType() {
+    return vendingMachineType;
   }
 
   public String getStateMessage() {
@@ -92,5 +97,13 @@ public class VendingMachine {
     this.currentCredit = this.currentCredit.subtract(returnedChange);
 
     return change;
+  }
+
+  public void reset(VendingMachine defaultSetting) {
+    this.currentCredit = defaultSetting.currentCredit;
+    this.vendingMachineType = defaultSetting.vendingMachineType;
+    this.changeStore = defaultSetting.changeStore;
+    this.productSystem = defaultSetting.productSystem;
+    this.coinReader = defaultSetting.coinReader;
   }
 }

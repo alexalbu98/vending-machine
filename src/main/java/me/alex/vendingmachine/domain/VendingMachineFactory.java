@@ -1,5 +1,6 @@
 package me.alex.vendingmachine.domain;
 
+import static me.alex.vendingmachine.domain.VendingMachineType.BEVERAGE;
 import static me.alex.vendingmachine.domain.product.ProductFactory.coke;
 import static me.alex.vendingmachine.domain.product.ProductFactory.pepsi;
 import static me.alex.vendingmachine.domain.product.ProductFactory.water;
@@ -20,6 +21,7 @@ public class VendingMachineFactory {
         .changeStore(new InMemoryChangeStore(new BigCoinsFirstRefundPolicy()))
         .productSystem(new InMemoryProductSystem(3))
         .currentCredit(BigDecimal.ZERO)
+        .vendingMachineType(BEVERAGE)
         .build();
 
     vm.addProductInventory(new ProductInventory(pepsi(), 10, 10, 60));
@@ -28,6 +30,13 @@ public class VendingMachineFactory {
 
     vm.setState(new IdleState(vm));
     return vm;
+  }
+
+  public static VendingMachine vendingMachine(VendingMachineType type) {
+    if (type == VendingMachineType.BEVERAGE) {
+      return beverageVendingMachine();
+    }
+    throw new IllegalArgumentException("Unsupported vending machine type: " + type);
   }
 
 }
