@@ -48,6 +48,10 @@ public class VendingMachine {
     return currentState;
   }
 
+  public boolean isLowOnChange() {
+     return changeStore.isLowOnChange();
+  }
+
   public void addProductInventory(ProductInventory productInventory) {
     productSystem.addProductInventory(productInventory);
   }

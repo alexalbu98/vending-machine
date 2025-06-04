@@ -1,7 +1,6 @@
 package me.alex.vendingmachine.domain.product;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductSystem {
 
@@ -9,8 +8,7 @@ public interface ProductSystem {
 
   ProductInventory getProductInventory(int productCode);
 
-  public List<ProductInventory> getProductInventory();
+  List<ProductInventory> getProductInventory();
 
-  public void dispenseProduct(int productCode);
-
+  void dispenseProduct(int productCode);
 }

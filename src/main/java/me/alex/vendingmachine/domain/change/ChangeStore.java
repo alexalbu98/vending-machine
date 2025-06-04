@@ -15,4 +15,6 @@ public interface ChangeStore {
   int getChangeQuantity(Coin coin);
 
   List<Change> refund(BigDecimal sum);
+
+  boolean isLowOnChange();
 }

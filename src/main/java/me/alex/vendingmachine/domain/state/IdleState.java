@@ -13,6 +13,9 @@ public class IdleState implements VendingMachineState {
   @Override
   public String getStateMessage() {
     String message = "Vending machine is ready!\n";
+    if (vendingMachine.isLowOnChange()) {
+      message += "Warning: Vending machine is low on change! Use fix money!\n";
+    }
     return message + formatProductsAsString(vendingMachine);
   }
 

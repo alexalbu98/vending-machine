@@ -10,9 +10,11 @@ public class InMemoryChangeStore implements ChangeStore {
 
   private final Map<Coin, Integer> coinMap = new TreeMap<>();
   private final RefundPolicy refundPolicy;
+  private final IsChangeLowPolicy isChangeLowPolicy;
 
-  public InMemoryChangeStore(RefundPolicy refundPolicy) {
+  public InMemoryChangeStore(RefundPolicy refundPolicy, IsChangeLowPolicy isChangeLowPolicy) {
     this.refundPolicy = refundPolicy;
+    this.isChangeLowPolicy = isChangeLowPolicy;
   }
 
   public void addChange(Coin coin, int quantity) {
@@ -46,6 +48,11 @@ public class InMemoryChangeStore implements ChangeStore {
       coinMap.put(c.coin(), newQuantity);
     });
     return changeList;
+  }
+
+  @Override
+  public boolean isLowOnChange() {
+    return isChangeLowPolicy.isChangeLow(coinMap);
   }
 
 }

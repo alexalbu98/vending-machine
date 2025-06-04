@@ -13,6 +13,7 @@ import me.alex.vendingmachine.domain.change.BigCoinsFirstRefundPolicy;
 import me.alex.vendingmachine.domain.change.Change;
 import me.alex.vendingmachine.domain.change.ChangeStore;
 import me.alex.vendingmachine.domain.change.InMemoryChangeStore;
+import me.alex.vendingmachine.domain.change.IsChangeLowByCoinNumberAndQuantity;
 import me.alex.vendingmachine.domain.coin.Coin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,8 @@ public class InMemoryChangeStoreTests {
 
   @BeforeEach
   void initObjects() {
-    changeStore = new InMemoryChangeStore(new BigCoinsFirstRefundPolicy());
+    changeStore = new InMemoryChangeStore(new BigCoinsFirstRefundPolicy(),
+        new IsChangeLowByCoinNumberAndQuantity());
   }
 
   @Test
