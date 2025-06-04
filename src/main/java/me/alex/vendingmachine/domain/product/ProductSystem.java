@@ -1,5 +1,6 @@
 package me.alex.vendingmachine.domain.product;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ProductSystem {
@@ -11,4 +12,6 @@ public interface ProductSystem {
   List<ProductInventory> getProductInventory();
 
   void dispenseProduct(int productCode);
+
+  void updateProductPrice(int productCode, BigDecimal newPrice);
 }

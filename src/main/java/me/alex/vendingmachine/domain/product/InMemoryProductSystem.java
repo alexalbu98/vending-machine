@@ -1,5 +1,6 @@
 package me.alex.vendingmachine.domain.product;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,5 +42,19 @@ public class InMemoryProductSystem implements ProductSystem {
   public void dispenseProduct(int productCode) {
     var inventory = getProductInventory(productCode);
     inventory.decreaseQuantity();
+  }
+
+  @Override
+  public void updateProductPrice(int productCode, BigDecimal newPrice) {
+    if(newPrice.compareTo(BigDecimal.ZERO) <= 0) {
+      throw new IllegalArgumentException("New price must be greater than zero.");
+    }
+    var inventory = products.get(productCode);
+    if (inventory == null) {
+      throw new IllegalArgumentException("Product with code " + productCode + " not found.");
+    }
+    var product = inventory.getProduct();
+    inventory.setProduct(new Product(product.name(), newPrice));
+    products.put(productCode, inventory);
   }
 }

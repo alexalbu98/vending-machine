@@ -95,4 +95,39 @@ public class InMemoryProductSystemTests {
   void getProductInventoryListReturnsEmptyListWhenNoProductsAdded() {
     assertTrue(productSystem.getProductInventory().isEmpty());
   }
+
+  @Test
+  void updateProductPriceUpdatesPriceSuccessfully() {
+    productSystem.addProductInventory(inventory);
+    productSystem.updateProductPrice(60, new BigDecimal("2.50"));
+    assertEquals(new BigDecimal("2.50"),
+        productSystem.getProductInventory(60).getProduct().price());
+  }
+
+  @Test
+  void updateProductPriceThrowsExceptionForNonExistentProductCode() {
+    assertThrows(IllegalArgumentException.class,
+        () -> productSystem.updateProductPrice(99, new BigDecimal("1.50")));
+  }
+
+  @Test
+  void updateProductPricePreservesProductName() {
+    productSystem.addProductInventory(inventory);
+    productSystem.updateProductPrice(60, new BigDecimal("3.00"));
+    assertEquals("Chips", productSystem.getProductInventory(60).getProduct().name());
+  }
+
+  @Test
+  void updateProductPriceHandlesNegativePriceGracefully() {
+    productSystem.addProductInventory(inventory);
+    assertThrows(IllegalArgumentException.class,
+        () -> productSystem.updateProductPrice(60, new BigDecimal("-1.00")));
+  }
+
+  @Test
+  void updateProductPriceHandlesZeroPriceSuccessfully() {
+    productSystem.addProductInventory(inventory);
+    assertThrows(IllegalArgumentException.class,
+        () -> productSystem.updateProductPrice(60, BigDecimal.ZERO));
+  }
 }

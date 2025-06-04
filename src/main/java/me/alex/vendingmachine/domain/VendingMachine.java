@@ -49,7 +49,7 @@ public class VendingMachine {
   }
 
   public boolean isLowOnChange() {
-     return changeStore.isLowOnChange();
+    return changeStore.isLowOnChange();
   }
 
   public void addProductInventory(ProductInventory productInventory) {
@@ -109,5 +109,13 @@ public class VendingMachine {
     this.changeStore = defaultSetting.changeStore;
     this.productSystem = defaultSetting.productSystem;
     this.coinReader = defaultSetting.coinReader;
+  }
+
+  public void setCurrentCredit(BigDecimal credit) {
+    this.currentCredit = credit;
+  }
+
+  public void updateProductPrice(int productCode, BigDecimal newPrice) {
+    productSystem.updateProductPrice(productCode, newPrice);
   }
 }

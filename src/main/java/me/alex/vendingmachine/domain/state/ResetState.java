@@ -22,6 +22,8 @@ public class ResetState implements VendingMachineState {
   @Override
   public List<String> getAvailableOptions() {
     return List.of("Type 'default' to reset the vending machine to default state",
+        "Type 'price' to change product price",
+        "Type 'qty' to change product quantity",
         "Type 'exit' to exit the reset mode");
   }
 
@@ -41,10 +43,10 @@ public class ResetState implements VendingMachineState {
     if (input.equals(EXIT)) {
       vendingMachine.setState(new IdleState(vendingMachine));
     }
-    if (input.equals(CHANGE_PRICE)){
+    if (input.equals(CHANGE_PRICE)) {
       vendingMachine.setState(new ChangeProductPriceState(vendingMachine));
     }
-    if( input.equals(CHANGE_QUANTITY)) {
+    if (input.equals(CHANGE_QUANTITY)) {
       vendingMachine.setState(new ChangeProductQuantityState(vendingMachine));
     }
   }

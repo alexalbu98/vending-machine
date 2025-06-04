@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public class ProductInventory {
 
-  private final Product product;
+  private Product product;
   private final int maxQuantity;
   private int quantity;
   private final Integer code;
@@ -67,5 +67,9 @@ public class ProductInventory {
 
   public int getQuantity() {
     return this.quantity;
+  }
+
+  public void setProduct(Product product) {
+    this.product = product;
   }
 }
