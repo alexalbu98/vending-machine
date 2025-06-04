@@ -8,6 +8,7 @@ import me.alex.vendingmachine.domain.VendingMachine;
 public class ChangeProductQuantityState implements VendingMachineState {
 
   private final VendingMachine vendingMachine;
+  private final static String EXIT = "exit";
 
   @Override
   public String getStateMessage() {
@@ -16,7 +17,8 @@ public class ChangeProductQuantityState implements VendingMachineState {
 
   @Override
   public List<String> getAvailableOptions() {
-    return List.of("Type <product code>=<quantity> to change its quantity:");
+    return List.of("Type <product code>=<quantity> to change its quantity:",
+        "Type 'exit' to return back");
   }
 
   @Override
@@ -26,6 +28,10 @@ public class ChangeProductQuantityState implements VendingMachineState {
 
   @Override
   public void inputAction(String input) {
+    if (input.equals(EXIT)) {
+      vendingMachine.setState(new ResetState(vendingMachine));
+      return;
+    }
     vendingMachine.updateProductQuantity(getProductCode(input), getProductQuantity(input));
     vendingMachine.setState(new ResetState(vendingMachine));
   }

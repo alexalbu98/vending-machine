@@ -1,5 +1,6 @@
 package me.alex.vendingmachine.domain.state;
 
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
@@ -22,7 +23,7 @@ public class ResetState implements VendingMachineState {
 
   @Override
   public List<String> getAvailableOptions() {
-    return List.of("Type 'default' to reset the vending machine to default state",
+    return List.of("Type 'default' to reset the vending machine to factory settings",
         "Type 'price' to change product price",
         "Type 'qty' to change product quantity",
         "Type 'coin' to add coins for change to the vending machine",
@@ -31,6 +32,7 @@ public class ResetState implements VendingMachineState {
 
   @Override
   public String stateAction() {
+    vendingMachine.setCurrentCredit(BigDecimal.ZERO);
     return "";
   }
 
@@ -47,7 +49,7 @@ public class ResetState implements VendingMachineState {
       case CHANGE_PRICE -> vendingMachine.setState(new ChangeProductPriceState(vendingMachine));
       case CHANGE_QUANTITY ->
           vendingMachine.setState(new ChangeProductQuantityState(vendingMachine));
-      case ADD_COIN -> vendingMachine.setState(new AddCoinState(vendingMachine));
+      case ADD_COIN -> vendingMachine.setState(new UpdateChangeState(vendingMachine));
       default ->
           throw new IllegalArgumentException("Invalid input: " + input + ". Not a known command.");
     }
