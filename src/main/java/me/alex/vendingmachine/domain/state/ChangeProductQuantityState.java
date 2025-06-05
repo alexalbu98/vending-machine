@@ -36,6 +36,11 @@ public class ChangeProductQuantityState implements VendingMachineState {
     vendingMachine.setState(new ResetState(vendingMachine));
   }
 
+  @Override
+  public boolean canAcceptInput() {
+    return true;
+  }
+
   private int getProductCode(String input) {
     return Integer.parseInt(input.split("=")[0].trim());
   }

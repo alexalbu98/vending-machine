@@ -41,4 +41,9 @@ public class CardPaymentState implements VendingMachineState {
     }
     throw new IllegalArgumentException("Invalid product code: " + input);
   }
+
+  @Override
+  public boolean canAcceptInput() {
+    return true;
+  }
 }

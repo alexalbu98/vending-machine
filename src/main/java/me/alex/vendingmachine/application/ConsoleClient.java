@@ -12,26 +12,29 @@ public class ConsoleClient {
 
   public void start() {
     while (true) {
-      beforeAction();
+      stateAction();
+      if (!vendingMachine.canAcceptInput()) {
+        continue;
+      }
       displayStateMessage();
       displayOptions();
-      doAction();
+      inputAction();
       sleep();
     }
   }
 
-  private void doAction() {
+  private void inputAction() {
     var input = readConsoleInput();
     try {
-      vendingMachine.doAction(input);
+      vendingMachine.inputAction(input);
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
   }
 
-  private void beforeAction() {
+  private void stateAction() {
     try {
-      String result = vendingMachine.beforeAction();
+      String result = vendingMachine.stateAction();
       System.out.println(result);
     } catch (Exception e) {
       System.out.println(e.getMessage());

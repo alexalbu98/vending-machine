@@ -27,23 +27,21 @@ public class ProcessingPaymentState implements VendingMachineState {
   public String stateAction() {
     var result = vendingMachine.processCardPayment(productCode, cardNumber, expiryDate, CVV);
     if (result.success()) {
-      return result.message() + "\n" + dispenseProduct();
+      vendingMachine.setState(
+          new DispensingState(vendingMachine, Integer.parseInt(productCode), false));
+    } else {
+      vendingMachine.setState(new IdleState(vendingMachine));
     }
-    vendingMachine.setState(new IdleState(vendingMachine));
     return result.message();
-  }
-
-  private String dispenseProduct() {
-    var state = new DispensingState(vendingMachine, Integer.parseInt(productCode), false);
-    try {
-      return state.stateAction();
-    } catch (Exception e) {
-      return e.getMessage();
-    }
   }
 
   @Override
   public void inputAction(String input) {
 
+  }
+
+  @Override
+  public boolean canAcceptInput() {
+    return false;
   }
 }

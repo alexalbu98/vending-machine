@@ -61,6 +61,11 @@ public class UpdateChangeState implements VendingMachineState {
     throw new IllegalArgumentException("Invalid input: " + input + ". Not a known command.");
   }
 
+  @Override
+  public boolean canAcceptInput() {
+    return true;
+  }
+
   private boolean isAddition(String input) {
     return input.split("\\+").length == 2;
   }

@@ -77,8 +77,8 @@ public class VendingMachineTests {
   }
 
   @Test
-  void doActionDelegatesToCurrentState() {
-    vendingMachine.doAction("Input");
+  void inputActionDelegatesToCurrentInput() {
+    vendingMachine.inputAction("Input");
     verify(currentState).inputAction("Input");
   }
 

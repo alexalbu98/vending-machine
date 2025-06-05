@@ -53,4 +53,9 @@ public class CoinInsertedState implements VendingMachineState {
     vendingMachine.incrementCredit(input);
   }
 
+  @Override
+  public boolean canAcceptInput() {
+    return true;
+  }
+
 }

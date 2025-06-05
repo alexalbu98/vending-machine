@@ -45,4 +45,9 @@ public class IdleState implements VendingMachineState {
     vendingMachine.incrementCredit(input);
     vendingMachine.setState(new CoinInsertedState(vendingMachine));
   }
+
+  @Override
+  public boolean canAcceptInput() {
+    return true;
+  }
 }

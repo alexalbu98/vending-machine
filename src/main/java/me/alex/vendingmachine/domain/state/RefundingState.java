@@ -37,7 +37,7 @@ public class RefundingState implements VendingMachineState {
     change.forEach(c ->
         stringBuilder.append("Refunded ")
             .append(c.quantity())
-            .append(" coins of value ")
+            .append(" coin(s) of value ")
             .append(c.coin().value()).append("\n")
     );
     if (vendingMachine.getCurrentCredit().compareTo(BigDecimal.ZERO) == 0) {
@@ -52,5 +52,10 @@ public class RefundingState implements VendingMachineState {
   @Override
   public void inputAction(String input) {
 
+  }
+
+  @Override
+  public boolean canAcceptInput() {
+    return false;
   }
 }

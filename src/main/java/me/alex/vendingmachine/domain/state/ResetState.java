@@ -54,4 +54,9 @@ public class ResetState implements VendingMachineState {
           throw new IllegalArgumentException("Invalid input: " + input + ". Not a known command.");
     }
   }
+
+  @Override
+  public boolean canAcceptInput() {
+    return true;
+  }
 }

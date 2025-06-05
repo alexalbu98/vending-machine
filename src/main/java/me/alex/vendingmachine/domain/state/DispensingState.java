@@ -24,7 +24,6 @@ public class DispensingState implements VendingMachineState {
 
   @Override
   public String stateAction() {
-    String message = "Dispensing selected product... Enjoy!";
     vendingMachine.dispenseProduct(productCode);
     if (isCreditPayment) {
       vendingMachine.payProduct(productCode);
@@ -32,29 +31,18 @@ public class DispensingState implements VendingMachineState {
     if (vendingMachine.getCurrentCredit().compareTo(BigDecimal.ZERO) == 0) {
       vendingMachine.setState(new IdleState(vendingMachine));
     } else {
-      message = refundChange(message);
-      changeStateByAvailableCredit();
+      vendingMachine.setState(new RefundingState(vendingMachine));
     }
-    return message;
-  }
-
-  private void changeStateByAvailableCredit() {
-    if (vendingMachine.getCurrentCredit().compareTo(BigDecimal.ZERO) == 0) {
-      vendingMachine.setState(new IdleState(vendingMachine));
-    }
-  }
-
-  private String refundChange(String message) {
-    RefundingState refundingState = new RefundingState(vendingMachine);
-    try {
-      return message + "\n" + refundingState.stateAction();
-    } catch (Exception e) {
-      return message + "\n" + e.getMessage();
-    }
+    return "Dispensing selected product... Enjoy!";
   }
 
   @Override
   public void inputAction(String input) {
 
+  }
+
+  @Override
+  public boolean canAcceptInput() {
+    return false;
   }
 }

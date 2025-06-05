@@ -76,11 +76,11 @@ public class VendingMachine {
     return currentState.getAvailableOptions();
   }
 
-  public String beforeAction() {
+  public String stateAction() {
     return currentState.stateAction();
   }
 
-  public void doAction(String input) {
+  public void inputAction(String input) {
     currentState.inputAction(input);
   }
 
@@ -172,5 +172,9 @@ public class VendingMachine {
   public CardPaymentResult processCardPayment(
       String productCode, String cardNumber, String expiryDate, String cvv) {
     return new CardPaymentResult(true, "Payment successful for product code: " + productCode);
+  }
+
+  public boolean canAcceptInput() {
+    return getCurrentState().canAcceptInput();
   }
 }

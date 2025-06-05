@@ -6,7 +6,7 @@ import me.alex.vendingmachine.domain.VendingMachine;
 
 public interface VendingMachineState {
 
-  public static final String RESET_COMMAND = "reset";
+  String RESET_COMMAND = "reset";
 
   String getStateMessage();
 
@@ -15,6 +15,8 @@ public interface VendingMachineState {
   String stateAction();
 
   void inputAction(String input);
+
+  boolean canAcceptInput();
 
   default String formatProductsAsString(VendingMachine vendingMachine) {
     return vendingMachine

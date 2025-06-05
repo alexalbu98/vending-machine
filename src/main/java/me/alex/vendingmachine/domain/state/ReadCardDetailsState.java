@@ -58,6 +58,11 @@ public class ReadCardDetailsState implements VendingMachineState {
     }
   }
 
+  @Override
+  public boolean canAcceptInput() {
+    return true;
+  }
+
   private void verifyCardNumber(String cardNumber) {
     if (!cardNumber.matches("\\d+")) {
       throw new IllegalArgumentException("Invalid card number format. Please enter only digits.");

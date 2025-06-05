@@ -65,8 +65,8 @@ public class RefundingStateTests {
 
     String result = state.stateAction();
 
-    assertTrue(result.contains("Refunded 4 coins of value 0.25"));
-    assertTrue(result.contains("Refunded 5 coins of value 0.10"));
+    assertTrue(result.contains("Refunded 4 coin(s) of value 0.25"));
+    assertTrue(result.contains("Refunded 5 coin(s) of value 0.10"));
     assertTrue(result.contains("Credit refunded successfully."));
   }
 }
