@@ -1,29 +1,19 @@
 package me.alex.vendingmachine.application;
 
 import java.util.Scanner;
-import lombok.RequiredArgsConstructor;
+import me.alex.vendingmachine.domain.AbstractVendingMachineClient;
 import me.alex.vendingmachine.domain.VendingMachine;
 
-@RequiredArgsConstructor
-public class ConsoleClient {
+public class ConsoleVendingMachineClient extends AbstractVendingMachineClient {
 
-  private final VendingMachine vendingMachine;
   private final Scanner scanner = new Scanner(System.in);
 
-  public void start() {
-    while (true) {
-      stateAction();
-      if (!vendingMachine.canAcceptInput()) {
-        continue;
-      }
-      displayStateMessage();
-      displayOptions();
-      inputAction();
-      sleep();
-    }
+  public ConsoleVendingMachineClient(VendingMachine vendingMachine) {
+    super(vendingMachine);
   }
 
-  private void inputAction() {
+  @Override
+  public void awaitInput() {
     var input = readConsoleInput();
     try {
       vendingMachine.inputAction(input);
@@ -32,7 +22,8 @@ public class ConsoleClient {
     }
   }
 
-  private void stateAction() {
+  @Override
+  public void stateAction() {
     try {
       String result = vendingMachine.stateAction();
       System.out.println(result);
@@ -41,13 +32,9 @@ public class ConsoleClient {
     }
   }
 
-  private void sleep() {
-    try {
-      Thread.sleep(500);
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      System.err.println("Thread interrupted: " + e.getMessage());
-    }
+  public void showInfo() {
+    displayStateMessage();
+    displayOptions();
   }
 
   private void displayStateMessage() {
