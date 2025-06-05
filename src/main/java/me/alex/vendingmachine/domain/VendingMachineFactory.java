@@ -10,6 +10,7 @@ import me.alex.vendingmachine.domain.change.BigCoinsFirstRefundPolicy;
 import me.alex.vendingmachine.domain.change.InMemoryChangeStore;
 import me.alex.vendingmachine.domain.change.IsChangeLowByCoinNumberAndQuantity;
 import me.alex.vendingmachine.domain.coin.FiveCoinsReader;
+import me.alex.vendingmachine.domain.payment.OfflinePaymentProcessorClient;
 import me.alex.vendingmachine.domain.product.InMemoryProductSystem;
 import me.alex.vendingmachine.domain.product.ProductInventory;
 import me.alex.vendingmachine.domain.state.IdleState;
@@ -24,6 +25,7 @@ public class VendingMachineFactory {
         .productSystem(new InMemoryProductSystem(3))
         .currentCredit(BigDecimal.ZERO)
         .vendingMachineType(BEVERAGE)
+        .paymentProcessorClient(new OfflinePaymentProcessorClient())
         .build();
 
     vm.addProductInventory(new ProductInventory(pepsi(), 10, 10, 60));

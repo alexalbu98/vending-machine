@@ -12,6 +12,7 @@ import me.alex.vendingmachine.domain.coin.Coin;
 import me.alex.vendingmachine.domain.coin.CoinReader;
 import me.alex.vendingmachine.domain.payment.CardPaymentResult;
 import me.alex.vendingmachine.domain.payment.CreditCardDetails;
+import me.alex.vendingmachine.domain.payment.PaymentProcessorClient;
 import me.alex.vendingmachine.domain.product.ProductInventory;
 import me.alex.vendingmachine.domain.product.ProductSystem;
 import me.alex.vendingmachine.domain.state.VendingMachineState;
@@ -27,6 +28,7 @@ public class VendingMachine {
   private CoinReader coinReader;
   private ChangeStore changeStore;
   private BigDecimal currentCredit;
+  private PaymentProcessorClient paymentProcessorClient;
 
   public void setState(VendingMachineState newState) {
     this.currentState = newState;
@@ -116,6 +118,7 @@ public class VendingMachine {
     this.changeStore = defaultSetting.changeStore;
     this.productSystem = defaultSetting.productSystem;
     this.coinReader = defaultSetting.coinReader;
+    this.paymentProcessorClient = defaultSetting.paymentProcessorClient;
   }
 
   public void setCurrentCredit(BigDecimal credit) {
@@ -170,9 +173,10 @@ public class VendingMachine {
         .anyMatch(product -> product.getCode().toString().equals(input));
   }
 
-  public CardPaymentResult processCardPayment(CreditCardDetails creditCardDetails,
-      String productCode) {
-    return new CardPaymentResult(true, "Payment successful for product code: " + productCode);
+  public CardPaymentResult processCardPayment(
+      CreditCardDetails creditCardDetails, String productCode) {
+    var inventory = productSystem.getProductInventory(Integer.parseInt(productCode));
+    return paymentProcessorClient.requestPayment(creditCardDetails, inventory.getProduct().price());
   }
 
   public boolean canAcceptInput() {
