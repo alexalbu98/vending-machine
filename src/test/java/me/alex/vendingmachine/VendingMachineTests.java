@@ -6,12 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.List;
 import me.alex.vendingmachine.domain.VendingMachine;
+import me.alex.vendingmachine.domain.VendingMachineType;
+import me.alex.vendingmachine.domain.change.Change;
 import me.alex.vendingmachine.domain.change.ChangeStore;
 import me.alex.vendingmachine.domain.coin.CoinReader;
 import me.alex.vendingmachine.domain.product.ProductInventory;
@@ -116,5 +119,60 @@ public class VendingMachineTests {
     List<ProductInventory> result = vendingMachine.getAvailableProducts();
 
     assertEquals(products, result);
+  }
+
+  @Test
+  void refundReturnsCorrectChangeAndResetsCredit() {
+    when(changeStore.refund(new BigDecimal("2.00"))).thenReturn(List.of(
+        new Change(dime(), 20)
+    ));
+
+    List<Change> refundedChange = vendingMachine.refund();
+
+    assertEquals(0, vendingMachine.getCurrentCredit().compareTo(BigDecimal.ZERO));
+    assertEquals(1, refundedChange.size());
+    assertEquals(dime(), refundedChange.get(0).coin());
+    assertEquals(20, refundedChange.get(0).quantity());
+  }
+
+  @Test
+  void refundHandlesInsufficientChangeGracefully() {
+    when(changeStore.refund(new BigDecimal("2.00"))).thenReturn(List.of());
+
+    List<Change> refundedChange = vendingMachine.refund();
+
+    assertEquals(0, refundedChange.size());
+    assertEquals(new BigDecimal("2.00"), vendingMachine.getCurrentCredit());
+  }
+
+  @Test
+  void resetRestoresDefaultSettings() {
+    VendingMachine defaultSettings = VendingMachine.builder()
+        .currentCredit(BigDecimal.ZERO)
+        .vendingMachineType(VendingMachineType.BEVERAGE)
+        .changeStore(mock(ChangeStore.class))
+        .productSystem(mock(ProductSystem.class))
+        .coinReader(mock(CoinReader.class))
+        .build();
+
+    vendingMachine.reset(defaultSettings);
+
+    assertEquals(BigDecimal.ZERO, vendingMachine.getCurrentCredit());
+    assertEquals(VendingMachineType.BEVERAGE, vendingMachine.getVendingMachineType());
+    assertEquals(defaultSettings.getCoins(), vendingMachine.getCoins());
+  }
+
+  @Test
+  void insertCoinIncrementsCoinQuantity() {
+    when(coinReader.readCoin("DIME")).thenReturn(dime());
+    vendingMachine.insertCoin("DIME", 3);
+    verify(changeStore, times(3)).incrementChange(dime());
+  }
+
+  @Test
+  void removeCoinDecrementsSpecificCoinQuantity() {
+    when(coinReader.readCoin("DIME")).thenReturn(dime());
+    vendingMachine.removeCoin("DIME", 2);
+    verify(changeStore).removeCoin(dime(), 2);
   }
 }
