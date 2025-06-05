@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class DispensingStateTests {
+
   private VendingMachine vendingMachine;
 
   @BeforeEach
@@ -38,6 +39,44 @@ public class DispensingStateTests {
 
   @Test
   void stateActionDispensesProductAndTransitionsToCoinInsertedStateWhenCreditIsNonZero() {
+    when(vendingMachine.getCurrentCredit()).thenReturn(new BigDecimal("1.00"));
+    DispensingState state = new DispensingState(vendingMachine, 1);
+
+    String result = state.stateAction();
+
+    verify(vendingMachine).dispenseProduct(1);
+    verify(vendingMachine).payProduct(1);
+    verify(vendingMachine).setState(any(CoinInsertedState.class));
+    assertTrue(result.contains("Dispensing selected product... Enjoy!"));
+    assertTrue(result.contains("not enough change"));
+  }
+
+  @Test
+  void stateActionHandlesRefundingExceptionGracefully() {
+    when(vendingMachine.getCurrentCredit()).thenReturn(new BigDecimal("1.00"));
+    DispensingState state = new DispensingState(vendingMachine, 1);
+
+    String result = state.stateAction();
+
+    assertTrue(result.contains("Dispensing selected product... Enjoy!"));
+    assertTrue(result.contains("not enough change"));
+  }
+
+  @Test
+  void stateActionTransitionsToIdleStateWhenRefundCompletesAndCreditIsZero() {
+    when(vendingMachine.getCurrentCredit()).thenReturn(BigDecimal.ZERO);
+    DispensingState state = new DispensingState(vendingMachine, 1);
+
+    String result = state.stateAction();
+
+    verify(vendingMachine).dispenseProduct(1);
+    verify(vendingMachine).payProduct(1);
+    verify(vendingMachine).setState(any(IdleState.class));
+    assertEquals("Dispensing selected product... Enjoy!", result);
+  }
+
+  @Test
+  void stateActionTransitionsToCoinInsertedStateWhenRefundCompletesAndCreditIsNonZero() {
     when(vendingMachine.getCurrentCredit()).thenReturn(new BigDecimal("1.00"));
     DispensingState state = new DispensingState(vendingMachine, 1);
 

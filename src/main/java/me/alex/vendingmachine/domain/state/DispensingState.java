@@ -30,16 +30,14 @@ public class DispensingState implements VendingMachineState {
       vendingMachine.setState(new IdleState(vendingMachine));
     } else {
       message = refundChange(message);
-      changeStateByCredit();
+      changeStateByAvailableCredit();
     }
     return message;
   }
 
-  private void changeStateByCredit() {
+  private void changeStateByAvailableCredit() {
     if (vendingMachine.getCurrentCredit().compareTo(BigDecimal.ZERO) == 0) {
       vendingMachine.setState(new IdleState(vendingMachine));
-    } else {
-      vendingMachine.setState(new RefundingState(vendingMachine));
     }
   }
 
