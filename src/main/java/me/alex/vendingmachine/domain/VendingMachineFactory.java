@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import me.alex.vendingmachine.domain.change.BigCoinsFirstRefundPolicy;
 import me.alex.vendingmachine.domain.change.InMemoryChangeStore;
 import me.alex.vendingmachine.domain.change.IsChangeLowByCoinNumberAndQuantity;
-import me.alex.vendingmachine.domain.coin.FiveCoinsReader;
+import me.alex.vendingmachine.domain.coin.SixCoinsReader;
 import me.alex.vendingmachine.domain.payment.OfflinePaymentProcessorClient;
 import me.alex.vendingmachine.domain.product.InMemoryProductSystem;
 import me.alex.vendingmachine.domain.product.ProductInventory;
@@ -19,7 +19,7 @@ public class VendingMachineFactory {
 
   public static VendingMachine beverageVendingMachine() {
     var vm = VendingMachine.builder()
-        .coinReader(new FiveCoinsReader())
+        .coinReader(new SixCoinsReader())
         .changeStore(new InMemoryChangeStore(new BigCoinsFirstRefundPolicy(),
             new IsChangeLowByCoinNumberAndQuantity()))
         .productSystem(new InMemoryProductSystem(3))

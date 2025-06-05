@@ -10,7 +10,7 @@ import static me.alex.vendingmachine.domain.coin.CoinFactory.valueOf;
 
 import java.util.List;
 
-public class FiveCoinsReader implements CoinReader {
+public class SixCoinsReader implements CoinReader {
 
   @Override
   public Coin readCoin(String value) {
