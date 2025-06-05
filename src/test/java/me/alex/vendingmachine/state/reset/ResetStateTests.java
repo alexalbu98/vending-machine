@@ -1,4 +1,4 @@
-package me.alex.vendingmachine.state;
+package me.alex.vendingmachine.state.reset;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

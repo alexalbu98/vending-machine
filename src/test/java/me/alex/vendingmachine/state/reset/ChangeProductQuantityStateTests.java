@@ -1,4 +1,4 @@
-package me.alex.vendingmachine.state;
+package me.alex.vendingmachine.state.reset;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -13,11 +13,12 @@ import me.alex.vendingmachine.domain.VendingMachine;
 import me.alex.vendingmachine.domain.product.Product;
 import me.alex.vendingmachine.domain.product.ProductInventory;
 import me.alex.vendingmachine.domain.state.reset.ChangeProductPriceState;
+import me.alex.vendingmachine.domain.state.reset.ChangeProductQuantityState;
 import me.alex.vendingmachine.domain.state.reset.ResetState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ChangeProductPriceStateTests {
+public class ChangeProductQuantityStateTests {
 
   private VendingMachine vendingMachine;
 
@@ -41,47 +42,48 @@ public class ChangeProductPriceStateTests {
 
   @Test
   void getAvailableOptionsReturnsCorrectOptions() {
-    ChangeProductPriceState state = new ChangeProductPriceState(vendingMachine);
+    ChangeProductQuantityState state = new ChangeProductQuantityState(vendingMachine);
     List<String> options = state.getAvailableOptions();
-    assertTrue(options.contains("Type <product code>=<price> to change its price:"));
+    assertTrue(options.contains("Type <product code>=<quantity> to change its quantity:"));
     assertTrue(options.contains("Type 'exit' to return back"));
   }
 
   @Test
-  void inputActionChangesProductPriceSuccessfully() {
-    ChangeProductPriceState state = new ChangeProductPriceState(vendingMachine);
-    state.inputAction("1=2.50");
-    verify(vendingMachine).updateProductPrice(1, new BigDecimal("2.50"));
+  void inputActionChangesProductQuantitySuccessfully() {
+    ChangeProductQuantityState state = new ChangeProductQuantityState(vendingMachine);
+    state.inputAction("1=10");
+    verify(vendingMachine).updateProductQuantity(1, 10);
+    verify(vendingMachine).setState(any(ResetState.class));
   }
 
   @Test
   void inputActionExitsToResetStateOnExitCommand() {
-    ChangeProductPriceState state = new ChangeProductPriceState(vendingMachine);
+    ChangeProductQuantityState state = new ChangeProductQuantityState(vendingMachine);
     state.inputAction("exit");
     verify(vendingMachine).setState(any(ResetState.class));
   }
 
   @Test
   void inputActionThrowsExceptionForInvalidInputFormat() {
-    ChangeProductPriceState state = new ChangeProductPriceState(vendingMachine);
+    ChangeProductQuantityState state = new ChangeProductQuantityState(vendingMachine);
     assertThrows(IllegalArgumentException.class, () -> state.inputAction("invalid"));
   }
 
   @Test
-  void inputActionThrowsExceptionForMissingPrice() {
-    ChangeProductPriceState state = new ChangeProductPriceState(vendingMachine);
+  void inputActionThrowsExceptionForMissingQuantity() {
+    ChangeProductQuantityState state = new ChangeProductQuantityState(vendingMachine);
     assertThrows(IllegalArgumentException.class, () -> state.inputAction("1="));
   }
 
   @Test
   void inputActionThrowsExceptionForMissingProductCode() {
-    ChangeProductPriceState state = new ChangeProductPriceState(vendingMachine);
+    ChangeProductQuantityState state = new ChangeProductQuantityState(vendingMachine);
     assertThrows(IllegalArgumentException.class, () -> state.inputAction("=1"));
   }
 
   @Test
-  void inputActionThrowsExceptionForNonNumericPrice() {
-    ChangeProductPriceState state = new ChangeProductPriceState(vendingMachine);
-    assertThrows(IllegalArgumentException.class, () -> state.inputAction("1=abc"));
+  void inputActionThrowsExceptionForNonNumericQuantity() {
+    ChangeProductQuantityState state = new ChangeProductQuantityState(vendingMachine);
+    assertThrows(NumberFormatException.class, () -> state.inputAction("1=abc"));
   }
 }
