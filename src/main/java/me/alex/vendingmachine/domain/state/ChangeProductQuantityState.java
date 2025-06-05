@@ -41,6 +41,11 @@ public class ChangeProductQuantityState implements VendingMachineState {
   }
 
   private Integer getProductQuantity(String input) {
-    return Integer.parseInt(input.split("=")[1].trim());
+    var args = input.split("=");
+    if (args.length != 2) {
+      throw new IllegalArgumentException(
+          "Invalid input format. Expected format: <product code>=<quantity>");
+    }
+    return Integer.parseInt(args[1].trim());
   }
 }

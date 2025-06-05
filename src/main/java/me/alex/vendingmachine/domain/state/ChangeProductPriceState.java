@@ -42,6 +42,11 @@ public class ChangeProductPriceState implements VendingMachineState {
   }
 
   private BigDecimal getNewPrice(String input) {
-    return new BigDecimal(input.split("=")[1].trim());
+    var args = input.split("=");
+    if (args.length != 2) {
+      throw new IllegalArgumentException(
+          "Invalid input format. Expected format: <product code>=<price>");
+    }
+    return new BigDecimal(args[1].trim());
   }
 }
