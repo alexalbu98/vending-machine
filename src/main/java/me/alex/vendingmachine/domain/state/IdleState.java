@@ -3,6 +3,8 @@ package me.alex.vendingmachine.domain.state;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
+import me.alex.vendingmachine.domain.state.card.CardPaymentState;
+import me.alex.vendingmachine.domain.state.reset.ResetState;
 
 @RequiredArgsConstructor
 public class IdleState implements VendingMachineState {

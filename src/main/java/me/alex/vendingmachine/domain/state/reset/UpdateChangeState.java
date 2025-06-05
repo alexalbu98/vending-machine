@@ -1,8 +1,9 @@
-package me.alex.vendingmachine.domain.state;
+package me.alex.vendingmachine.domain.state.reset;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
+import me.alex.vendingmachine.domain.state.VendingMachineState;
 
 @RequiredArgsConstructor
 public class UpdateChangeState implements VendingMachineState {

@@ -12,11 +12,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import me.alex.vendingmachine.domain.VendingMachine;
 import me.alex.vendingmachine.domain.VendingMachineType;
-import me.alex.vendingmachine.domain.state.ChangeProductPriceState;
-import me.alex.vendingmachine.domain.state.ChangeProductQuantityState;
+import me.alex.vendingmachine.domain.state.reset.ChangeProductPriceState;
+import me.alex.vendingmachine.domain.state.reset.ChangeProductQuantityState;
 import me.alex.vendingmachine.domain.state.IdleState;
-import me.alex.vendingmachine.domain.state.ResetState;
-import me.alex.vendingmachine.domain.state.UpdateChangeState;
+import me.alex.vendingmachine.domain.state.reset.ResetState;
+import me.alex.vendingmachine.domain.state.reset.UpdateChangeState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

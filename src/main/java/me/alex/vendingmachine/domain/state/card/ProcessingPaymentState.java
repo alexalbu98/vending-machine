@@ -1,8 +1,11 @@
-package me.alex.vendingmachine.domain.state;
+package me.alex.vendingmachine.domain.state.card;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
+import me.alex.vendingmachine.domain.state.DispensingState;
+import me.alex.vendingmachine.domain.state.IdleState;
+import me.alex.vendingmachine.domain.state.VendingMachineState;
 
 @RequiredArgsConstructor
 public class ProcessingPaymentState implements VendingMachineState {

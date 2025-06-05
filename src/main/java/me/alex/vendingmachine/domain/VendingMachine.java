@@ -6,7 +6,7 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import me.alex.vendingmachine.domain.card.CardPaymentResult;
+import me.alex.vendingmachine.domain.state.card.CardPaymentResult;
 import me.alex.vendingmachine.domain.change.Change;
 import me.alex.vendingmachine.domain.change.ChangeStore;
 import me.alex.vendingmachine.domain.coin.Coin;

@@ -12,8 +12,8 @@ import java.util.List;
 import me.alex.vendingmachine.domain.VendingMachine;
 import me.alex.vendingmachine.domain.product.Product;
 import me.alex.vendingmachine.domain.product.ProductInventory;
-import me.alex.vendingmachine.domain.state.ChangeProductPriceState;
-import me.alex.vendingmachine.domain.state.ResetState;
+import me.alex.vendingmachine.domain.state.reset.ChangeProductPriceState;
+import me.alex.vendingmachine.domain.state.reset.ResetState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 import java.util.Map;
 import me.alex.vendingmachine.domain.VendingMachine;
 import me.alex.vendingmachine.domain.coin.Coin;
-import me.alex.vendingmachine.domain.state.ResetState;
-import me.alex.vendingmachine.domain.state.UpdateChangeState;
+import me.alex.vendingmachine.domain.state.reset.ResetState;
+import me.alex.vendingmachine.domain.state.reset.UpdateChangeState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
