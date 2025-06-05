@@ -38,7 +38,7 @@ public class CoinInsertedState implements VendingMachineState {
     if (vendingMachine.productCodeExists(input)) {
       vendingMachine.verifyEnoughCreditToBuy(input);
       vendingMachine.verifyProductQuantity(input);
-      vendingMachine.setState(new DispensingState(vendingMachine, Integer.valueOf(input)));
+      vendingMachine.setState(new DispensingState(vendingMachine, Integer.valueOf(input), true));
       return;
     }
     if (input.equals(REFUND)) {

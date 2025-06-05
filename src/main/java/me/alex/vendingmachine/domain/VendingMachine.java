@@ -6,6 +6,7 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import me.alex.vendingmachine.domain.card.CardPaymentResult;
 import me.alex.vendingmachine.domain.change.Change;
 import me.alex.vendingmachine.domain.change.ChangeStore;
 import me.alex.vendingmachine.domain.coin.Coin;
@@ -166,5 +167,10 @@ public class VendingMachine {
   public boolean productCodeExists(String input) {
     return getAvailableProducts().stream()
         .anyMatch(product -> product.getCode().toString().equals(input));
+  }
+
+  public CardPaymentResult processCardPayment(
+      String productCode, String cardNumber, String expiryDate, String cvv) {
+    return new CardPaymentResult(true, "Payment successful for product code: " + productCode);
   }
 }

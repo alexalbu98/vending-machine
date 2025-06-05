@@ -27,7 +27,7 @@ public class DispensingStateTests {
   @Test
   void stateActionDispensesProductAndTransitionsToIdleStateWhenCreditIsZero() {
     when(vendingMachine.getCurrentCredit()).thenReturn(BigDecimal.ZERO);
-    DispensingState state = new DispensingState(vendingMachine, 1);
+    DispensingState state = new DispensingState(vendingMachine, 1, true);
 
     String result = state.stateAction();
 
@@ -40,7 +40,7 @@ public class DispensingStateTests {
   @Test
   void stateActionDispensesProductAndTransitionsToCoinInsertedStateWhenCreditIsNonZero() {
     when(vendingMachine.getCurrentCredit()).thenReturn(new BigDecimal("1.00"));
-    DispensingState state = new DispensingState(vendingMachine, 1);
+    DispensingState state = new DispensingState(vendingMachine, 1, true);
 
     String result = state.stateAction();
 
@@ -54,7 +54,7 @@ public class DispensingStateTests {
   @Test
   void stateActionHandlesRefundingExceptionGracefully() {
     when(vendingMachine.getCurrentCredit()).thenReturn(new BigDecimal("1.00"));
-    DispensingState state = new DispensingState(vendingMachine, 1);
+    DispensingState state = new DispensingState(vendingMachine, 1, true);
 
     String result = state.stateAction();
 
@@ -65,7 +65,7 @@ public class DispensingStateTests {
   @Test
   void stateActionTransitionsToIdleStateWhenRefundCompletesAndCreditIsZero() {
     when(vendingMachine.getCurrentCredit()).thenReturn(BigDecimal.ZERO);
-    DispensingState state = new DispensingState(vendingMachine, 1);
+    DispensingState state = new DispensingState(vendingMachine, 1, true);
 
     String result = state.stateAction();
 
@@ -78,7 +78,7 @@ public class DispensingStateTests {
   @Test
   void stateActionTransitionsToCoinInsertedStateWhenRefundCompletesAndCreditIsNonZero() {
     when(vendingMachine.getCurrentCredit()).thenReturn(new BigDecimal("1.00"));
-    DispensingState state = new DispensingState(vendingMachine, 1);
+    DispensingState state = new DispensingState(vendingMachine, 1, true);
 
     String result = state.stateAction();
 

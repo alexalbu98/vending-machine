@@ -10,6 +10,7 @@ public class DispensingState implements VendingMachineState {
 
   private final VendingMachine vendingMachine;
   private final Integer productCode;
+  private final boolean isCreditPayment;
 
   @Override
   public String getStateMessage() {
@@ -25,7 +26,9 @@ public class DispensingState implements VendingMachineState {
   public String stateAction() {
     String message = "Dispensing selected product... Enjoy!";
     vendingMachine.dispenseProduct(productCode);
-    vendingMachine.payProduct(productCode);
+    if (isCreditPayment) {
+      vendingMachine.payProduct(productCode);
+    }
     if (vendingMachine.getCurrentCredit().compareTo(BigDecimal.ZERO) == 0) {
       vendingMachine.setState(new IdleState(vendingMachine));
     } else {
