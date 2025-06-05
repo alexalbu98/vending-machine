@@ -13,7 +13,7 @@ public class UpdateChangeState implements VendingMachineState {
 
   @Override
   public String getStateMessage() {
-    return "Adding coins...\n" + formatCoinsAsString();
+    return "Updating coins...\n" + formatCoinsAsString();
   }
 
   private String formatCoinsAsString() {

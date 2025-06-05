@@ -42,7 +42,7 @@ public class ResetStateTests {
     assertTrue(options.contains("Type 'default' to reset the vending machine to factory settings"));
     assertTrue(options.contains("Type 'price' to change product price"));
     assertTrue(options.contains("Type 'qty' to change product quantity"));
-    assertTrue(options.contains("Type 'coin' to add coins for change to the vending machine"));
+    assertTrue(options.contains("Type 'coin' to add or remove coins for change"));
     assertTrue(options.contains("Type 'exit' to exit the reset mode"));
   }
 

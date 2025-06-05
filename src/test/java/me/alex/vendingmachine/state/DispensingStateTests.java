@@ -11,13 +11,19 @@ import me.alex.vendingmachine.domain.VendingMachine;
 import me.alex.vendingmachine.domain.state.CoinInsertedState;
 import me.alex.vendingmachine.domain.state.DispensingState;
 import me.alex.vendingmachine.domain.state.IdleState;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class DispensingStateTests {
+  private VendingMachine vendingMachine;
+
+  @BeforeEach
+  void setupMocks() {
+    vendingMachine = mock(VendingMachine.class);
+  }
 
   @Test
   void stateActionDispensesProductAndTransitionsToIdleStateWhenCreditIsZero() {
-    VendingMachine vendingMachine = mock(VendingMachine.class);
     when(vendingMachine.getCurrentCredit()).thenReturn(BigDecimal.ZERO);
     DispensingState state = new DispensingState(vendingMachine, 1);
 
@@ -31,7 +37,6 @@ public class DispensingStateTests {
 
   @Test
   void stateActionDispensesProductAndTransitionsToCoinInsertedStateWhenCreditIsNonZero() {
-    VendingMachine vendingMachine = mock(VendingMachine.class);
     when(vendingMachine.getCurrentCredit()).thenReturn(new BigDecimal("1.00"));
     DispensingState state = new DispensingState(vendingMachine, 1);
 

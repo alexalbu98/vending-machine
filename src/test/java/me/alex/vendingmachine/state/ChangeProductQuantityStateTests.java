@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 
 public class ChangeProductQuantityStateTests {
 
-  VendingMachine vendingMachine;
+  private VendingMachine vendingMachine;
 
   @BeforeEach
   void setupMocks() {

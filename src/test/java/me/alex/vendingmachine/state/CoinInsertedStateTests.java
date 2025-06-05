@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 public class CoinInsertedStateTests {
 
-  VendingMachine vendingMachine;
+  private VendingMachine vendingMachine;
 
   @BeforeEach
   void setupMocks() {

@@ -26,7 +26,7 @@ public class ResetState implements VendingMachineState {
     return List.of("Type 'default' to reset the vending machine to factory settings",
         "Type 'price' to change product price",
         "Type 'qty' to change product quantity",
-        "Type 'coin' to add coins for change to the vending machine",
+        "Type 'coin' to add or remove coins for change",
         "Type 'exit' to exit the reset mode");
   }
 
