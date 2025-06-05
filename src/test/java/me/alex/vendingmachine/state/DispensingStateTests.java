@@ -1,6 +1,7 @@
 package me.alex.vendingmachine.state;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -45,6 +46,7 @@ public class DispensingStateTests {
     verify(vendingMachine).dispenseProduct(1);
     verify(vendingMachine).payProduct(1);
     verify(vendingMachine).setState(any(CoinInsertedState.class));
-    assertEquals("Dispensing selected product... Enjoy!", result);
+    assertTrue(result.contains("Dispensing selected product... Enjoy!"));
+    assertTrue(result.contains("not enough change"));
   }
 }

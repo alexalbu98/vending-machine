@@ -23,14 +23,33 @@ public class DispensingState implements VendingMachineState {
 
   @Override
   public String stateAction() {
+    String message = "Dispensing selected product... Enjoy!";
     vendingMachine.dispenseProduct(productCode);
     vendingMachine.payProduct(productCode);
     if (vendingMachine.getCurrentCredit().compareTo(BigDecimal.ZERO) == 0) {
       vendingMachine.setState(new IdleState(vendingMachine));
     } else {
-      vendingMachine.setState(new CoinInsertedState(vendingMachine));
+      message = refundChange(message);
+      changeStateByCredit();
     }
-    return "Dispensing selected product... Enjoy!";
+    return message;
+  }
+
+  private void changeStateByCredit() {
+    if (vendingMachine.getCurrentCredit().compareTo(BigDecimal.ZERO) == 0) {
+      vendingMachine.setState(new IdleState(vendingMachine));
+    } else {
+      vendingMachine.setState(new RefundingState(vendingMachine));
+    }
+  }
+
+  private String refundChange(String message) {
+    RefundingState refundingState = new RefundingState(vendingMachine);
+    try {
+      return message + "\n" + refundingState.stateAction();
+    } catch (Exception e) {
+      return message + "\n" + e.getMessage();
+    }
   }
 
   @Override
