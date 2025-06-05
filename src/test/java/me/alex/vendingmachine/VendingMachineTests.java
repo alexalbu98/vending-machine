@@ -77,11 +77,16 @@ public class VendingMachineTests {
   }
 
   @Test
-  void insertCoinUpdatesCreditAndIncrementsChangeStore() {
+  void updateCreditUpdatesCredit() {
+    vendingMachine.incrementCredit("2.10");
+    assertEquals(new BigDecimal("4.10"), vendingMachine.getCurrentCredit());
+  }
+
+  @Test
+  void insertCoinUpdatesAvailableChange() {
     when(coinReader.readCoin("DIME")).thenReturn(dime());
     vendingMachine.insertCoin("DIME");
     verify(changeStore).incrementChange(dime());
-    assertEquals(new BigDecimal("2.10"), vendingMachine.getCurrentCredit());
   }
 
   @Test

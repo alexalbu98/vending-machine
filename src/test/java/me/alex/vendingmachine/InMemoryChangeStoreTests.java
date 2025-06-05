@@ -81,4 +81,38 @@ public class InMemoryChangeStoreTests {
     assertEquals(3, changeStore.getChangeQuantity(dime()));
     assertEquals(2, changeStore.getChangeQuantity(nickel()));
   }
+
+  @Test
+  void removeCoinsClearsAllCoinsSuccessfully() {
+    changeStore.addChange(dime(), 5);
+    changeStore.addChange(nickel(), 3);
+    changeStore.removeCoins();
+    assertEquals(0, changeStore.getChangeQuantity(dime()));
+    assertEquals(0, changeStore.getChangeQuantity(nickel()));
+  }
+
+  @Test
+  void removeCoinDecreasesSpecificCoinQuantitySuccessfully() {
+    changeStore.addChange(dime(), 5);
+    changeStore.removeCoin(dime(), 3);
+    assertEquals(2, changeStore.getChangeQuantity(dime()));
+  }
+
+  @Test
+  void removeCoinThrowsExceptionWhenQuantityExceedsAvailableCoins() {
+    changeStore.addChange(dime(), 2);
+    assertThrows(IllegalStateException.class, () -> changeStore.removeCoin(dime(), 3));
+  }
+
+  @Test
+  void removeCoinThrowsExceptionForNonExistentCoin() {
+    assertThrows(IllegalStateException.class, () -> changeStore.removeCoin(coin(), 1));
+  }
+
+  @Test
+  void removeCoinThrowsExceptionForZeroOrNegativeQuantity() {
+    changeStore.addChange(dime(), 5);
+    assertThrows(IllegalArgumentException.class, () -> changeStore.removeCoin(dime(), 0));
+    assertThrows(IllegalArgumentException.class, () -> changeStore.removeCoin(dime(), -1));
+  }
 }

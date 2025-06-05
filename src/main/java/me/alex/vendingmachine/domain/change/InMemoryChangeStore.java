@@ -63,7 +63,7 @@ public class InMemoryChangeStore implements ChangeStore {
 
   @Override
   public void removeCoins() {
-    coinMap.clear();
+    coinMap.keySet().forEach(c -> coinMap.put(c, 0));
   }
 
   @Override
