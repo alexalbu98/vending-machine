@@ -38,7 +38,7 @@ public class CardPaymentState implements VendingMachineState {
     }
     if (vendingMachine.productCodeExists(input)) {
       vendingMachine.verifyProductQuantity(input);
-      vendingMachine.setState(new ReadCardDetailsState(vendingMachine, input, null, null, null));
+      vendingMachine.setState(new ReadCardDetailsState(vendingMachine, input, null, null, null, null));
       return;
     }
     throw new IllegalArgumentException("Invalid product code: " + input);

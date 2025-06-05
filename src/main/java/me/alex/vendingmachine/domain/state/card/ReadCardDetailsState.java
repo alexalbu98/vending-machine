@@ -3,6 +3,7 @@ package me.alex.vendingmachine.domain.state.card;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
+import me.alex.vendingmachine.domain.payment.CreditCardDetails;
 import me.alex.vendingmachine.domain.state.VendingMachineState;
 
 @RequiredArgsConstructor
@@ -12,7 +13,8 @@ public class ReadCardDetailsState implements VendingMachineState {
   private final String productCode;
   private final String cardNumber;
   private final String expiryDate;
-  private final String CVV;
+  private final String cardHolderName;
+  private final String cvv;
 
   @Override
   public String getStateMessage() {
@@ -27,7 +29,10 @@ public class ReadCardDetailsState implements VendingMachineState {
     if (expiryDate == null || expiryDate.isEmpty()) {
       return List.of("Please enter card expiry date (MM/YY):");
     }
-    if (CVV == null || CVV.isEmpty()) {
+    if (cardHolderName == null || cardHolderName.isEmpty()) {
+      return List.of("Please enter cardholder name:");
+    }
+    if (cvv == null || cvv.isEmpty()) {
       return List.of("Please enter card CVV:");
     }
     return List.of();
@@ -43,19 +48,29 @@ public class ReadCardDetailsState implements VendingMachineState {
     if (cardNumber == null || cardNumber.isEmpty()) {
       verifyCardNumber(input);
       vendingMachine.setState(
-          new ReadCardDetailsState(vendingMachine, productCode, input, expiryDate, CVV));
+          new ReadCardDetailsState(vendingMachine, productCode, input, expiryDate, cardHolderName,
+              cvv));
       return;
     }
     if (expiryDate == null || expiryDate.isEmpty()) {
       verifyExpiryDate(input);
       vendingMachine.setState(
-          new ReadCardDetailsState(vendingMachine, productCode, cardNumber, input, CVV));
+          new ReadCardDetailsState(vendingMachine, productCode, cardNumber, input, cardHolderName,
+              cvv));
       return;
     }
-    if (CVV == null || CVV.isEmpty()) {
+    if (cardHolderName == null || cardHolderName.isEmpty()) {
+      vendingMachine.setState(
+          new ReadCardDetailsState(vendingMachine, productCode, cardNumber, expiryDate, input,
+              cvv));
+      return;
+    }
+    if (cvv == null || cvv.isEmpty()) {
       verifyCVV(input);
       vendingMachine.setState(
-          new ProcessingPaymentState(vendingMachine, productCode, cardNumber, expiryDate, CVV));
+          new ProcessingPaymentState(vendingMachine,
+              new CreditCardDetails(cardNumber, cardHolderName, expiryDate,
+                  cvv), productCode));
     }
   }
 

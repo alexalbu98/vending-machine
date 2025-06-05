@@ -3,6 +3,7 @@ package me.alex.vendingmachine.domain.state.card;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
+import me.alex.vendingmachine.domain.payment.CreditCardDetails;
 import me.alex.vendingmachine.domain.state.DispensingState;
 import me.alex.vendingmachine.domain.state.IdleState;
 import me.alex.vendingmachine.domain.state.VendingMachineState;
@@ -11,10 +12,8 @@ import me.alex.vendingmachine.domain.state.VendingMachineState;
 public class ProcessingPaymentState implements VendingMachineState {
 
   private final VendingMachine vendingMachine;
+  private final CreditCardDetails creditCardDetails;
   private final String productCode;
-  private final String cardNumber;
-  private final String expiryDate;
-  private final String CVV;
 
   @Override
   public String getStateMessage() {
@@ -28,7 +27,7 @@ public class ProcessingPaymentState implements VendingMachineState {
 
   @Override
   public String stateAction() {
-    var result = vendingMachine.processCardPayment(productCode, cardNumber, expiryDate, CVV);
+    var result = vendingMachine.processCardPayment(creditCardDetails, productCode);
     if (result.success()) {
       vendingMachine.setState(
           new DispensingState(vendingMachine, Integer.parseInt(productCode), false));

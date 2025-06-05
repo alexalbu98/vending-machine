@@ -6,11 +6,12 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import me.alex.vendingmachine.domain.state.card.CardPaymentResult;
 import me.alex.vendingmachine.domain.change.Change;
 import me.alex.vendingmachine.domain.change.ChangeStore;
 import me.alex.vendingmachine.domain.coin.Coin;
 import me.alex.vendingmachine.domain.coin.CoinReader;
+import me.alex.vendingmachine.domain.payment.CardPaymentResult;
+import me.alex.vendingmachine.domain.payment.CreditCardDetails;
 import me.alex.vendingmachine.domain.product.ProductInventory;
 import me.alex.vendingmachine.domain.product.ProductSystem;
 import me.alex.vendingmachine.domain.state.VendingMachineState;
@@ -169,8 +170,8 @@ public class VendingMachine {
         .anyMatch(product -> product.getCode().toString().equals(input));
   }
 
-  public CardPaymentResult processCardPayment(
-      String productCode, String cardNumber, String expiryDate, String cvv) {
+  public CardPaymentResult processCardPayment(CreditCardDetails creditCardDetails,
+      String productCode) {
     return new CardPaymentResult(true, "Payment successful for product code: " + productCode);
   }
 
