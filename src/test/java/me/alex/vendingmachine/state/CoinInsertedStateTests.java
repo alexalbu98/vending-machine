@@ -38,15 +38,23 @@ public class CoinInsertedStateTests {
   @Test
   void doActionTransitionsToDispensingStateForValidProductCode() {
     doReturn(new BigDecimal("2.00")).when(vendingMachine).getCurrentCredit();
+    doReturn(true).when(vendingMachine).productCodeExists("60");
+
     CoinInsertedState state = new CoinInsertedState(vendingMachine);
     state.inputAction("60");
 
+    verify(vendingMachine).verifyProductQuantity("60");
+    verify(vendingMachine).verifyEnoughCreditToBuy("60");
     verify(vendingMachine).setState(any(DispensingState.class));
   }
 
   @Test
   void inputActionDoesNotTransitionsToDispensingStateWhenInsufficientFunds() {
     doReturn(new BigDecimal("0.05")).when(vendingMachine).getCurrentCredit();
+    doReturn(true).when(vendingMachine).productCodeExists("60");
+    doThrow(new IllegalStateException("Not enough credit")).when(vendingMachine)
+        .verifyProductQuantity("60");
+
     CoinInsertedState state = new CoinInsertedState(vendingMachine);
     assertThrows(IllegalStateException.class, () -> state.inputAction("60"));
   }
@@ -54,8 +62,10 @@ public class CoinInsertedStateTests {
   @Test
   void inputActionDoesNotTransitionsToDispensingStateWhenProductOutOfStock() {
     doReturn(new BigDecimal("2.00")).when(vendingMachine).getCurrentCredit();
-    when(vendingMachine.getAvailableProducts()).thenReturn(List.of(
-        new ProductInventory(pepsi(), 10, 0, 60)));
+    doReturn(true).when(vendingMachine).productCodeExists("60");
+    doThrow(new IllegalStateException("Product out of stock")).when(vendingMachine)
+        .verifyProductQuantity("60");
+
     CoinInsertedState state = new CoinInsertedState(vendingMachine);
     assertThrows(IllegalStateException.class, () -> state.inputAction("60"));
   }
