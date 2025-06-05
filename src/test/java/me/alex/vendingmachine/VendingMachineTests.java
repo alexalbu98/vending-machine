@@ -20,6 +20,9 @@ import me.alex.vendingmachine.domain.VendingMachineType;
 import me.alex.vendingmachine.domain.change.Change;
 import me.alex.vendingmachine.domain.change.ChangeStore;
 import me.alex.vendingmachine.domain.coin.CoinReader;
+import me.alex.vendingmachine.domain.payment.CardPaymentResult;
+import me.alex.vendingmachine.domain.payment.CreditCardDetails;
+import me.alex.vendingmachine.domain.payment.PaymentProcessorClient;
 import me.alex.vendingmachine.domain.product.ProductInventory;
 import me.alex.vendingmachine.domain.product.ProductSystem;
 import me.alex.vendingmachine.domain.state.VendingMachineState;
@@ -34,6 +37,10 @@ public class VendingMachineTests {
   VendingMachineState currentState = mock(VendingMachineState.class);
   CoinReader coinReader;
   ChangeStore changeStore;
+  PaymentProcessorClient paymentProcessorClient;
+
+  private final CreditCardDetails creditCardDetails = new CreditCardDetails("1234567890123456",
+      "alex", "12/25", "123");
 
   @BeforeEach
   void setupMocks() {
@@ -42,6 +49,7 @@ public class VendingMachineTests {
     currentState = mock(VendingMachineState.class);
     coinReader = mock(CoinReader.class);
     changeStore = mock(ChangeStore.class);
+    paymentProcessorClient = mock(PaymentProcessorClient.class);
 
     vendingMachine = VendingMachine.builder()
         .productSystem(productSystem)
@@ -49,6 +57,7 @@ public class VendingMachineTests {
         .changeStore(changeStore)
         .currentState(currentState)
         .currentCredit(new BigDecimal("2.00"))
+        .paymentProcessorClient(paymentProcessorClient)
         .build();
 
   }
@@ -249,5 +258,50 @@ public class VendingMachineTests {
     when(vendingMachine.getAvailableProducts()).thenReturn(List.of());
 
     assertFalse(vendingMachine.productCodeExists("999"));
+  }
+
+  @Test
+  void processCardPaymentReturnsSuccessfulResultForValidPayment() {
+    ProductInventory productInventory = mock(ProductInventory.class);
+    when(productInventory.getProduct()).thenReturn(coke());
+    when(productSystem.getProductInventory(1)).thenReturn(productInventory);
+    when(paymentProcessorClient.requestPayment(creditCardDetails, coke().price()))
+        .thenReturn(new CardPaymentResult(true, "success"));
+
+    CardPaymentResult result = vendingMachine.processCardPayment(creditCardDetails, "1");
+    assertEquals(new CardPaymentResult(true, "success"), result);
+  }
+
+  @Test
+  void processCardPaymentThrowsExceptionForInvalidProductCode() {
+    when(productSystem.getProductInventory(99)).thenThrow(
+        new IllegalArgumentException("Invalid product code"));
+
+    assertThrows(IllegalArgumentException.class,
+        () -> vendingMachine.processCardPayment(creditCardDetails, "99"));
+  }
+
+  @Test
+  void processCardPaymentReturnsFailureForDeclinedPayment() {
+    ProductInventory productInventory = mock(ProductInventory.class);
+    when(productInventory.getProduct()).thenReturn(coke());
+    when(productSystem.getProductInventory(1)).thenReturn(productInventory);
+    when(paymentProcessorClient.requestPayment(creditCardDetails, coke().price()))
+        .thenReturn(new CardPaymentResult(false, "declined"));
+
+    CardPaymentResult result = vendingMachine.processCardPayment(creditCardDetails, "1");
+    assertEquals(new CardPaymentResult(false, "declined"), result);
+  }
+
+  @Test
+  void canAcceptInputReturnsTrueWhenStateAllowsInput() {
+    when(currentState.canAcceptInput()).thenReturn(true);
+    assertTrue(vendingMachine.canAcceptInput());
+  }
+
+  @Test
+  void canAcceptInputReturnsFalseWhenStateDoesNotAllowInput() {
+    when(currentState.canAcceptInput()).thenReturn(false);
+    assertFalse(vendingMachine.canAcceptInput());
   }
 }
