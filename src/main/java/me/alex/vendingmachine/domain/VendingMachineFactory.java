@@ -32,9 +32,10 @@ public class VendingMachineFactory {
 
     vm.insertCoin("0.05", 10);
     vm.insertCoin("0.10", 9);
-    vm.insertCoin("0.50", 8);
-    vm.insertCoin("1.00", 7);
-    vm.insertCoin("2.00", 6);
+    vm.insertCoin("0.20", 8);
+    vm.insertCoin("0.50", 7);
+    vm.insertCoin("1.00", 6);
+    vm.insertCoin("2.00", 5);
 
     vm.setState(new IdleState(vm));
 

@@ -12,6 +12,10 @@ public class CoinFactory {
     return new Coin("Dime", new BigDecimal("0.10"));
   }
 
+  public static Coin twentyCent() {
+    return new Coin("TwentyCent", new BigDecimal("0.20"));
+  }
+
   public static Coin halfCoin() {
     return new Coin("Half Coin", new BigDecimal("0.50"));
   }
@@ -32,6 +36,7 @@ public class CoinFactory {
     return switch (coinValue) {
       case "0.05" -> nickel();
       case "0.10" -> dime();
+      case "0.20" -> twentyCent();
       case "0.50" -> halfCoin();
       case "1.00" -> coin();
       case "2.00" -> twoCoin();
