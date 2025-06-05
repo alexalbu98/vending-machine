@@ -70,10 +70,20 @@ public class UpdateChangeState implements VendingMachineState {
   }
 
   private String getCoinValue(String input, String delimiter) {
+    verifyInputFormat(input, delimiter);
     return input.split(delimiter)[0].trim();
   }
 
   private int getCoinQuantity(String input, String delimiter) {
+    verifyInputFormat(input, delimiter);
     return Integer.parseInt(input.split(delimiter)[1].trim());
+  }
+
+  private void verifyInputFormat(String input, String delimiter) {
+    var args = input.split(delimiter);
+    if (args.length != 2 || args[1].trim().isEmpty() || args[0].trim().isEmpty()) {
+      throw new IllegalArgumentException("Invalid input: " + input
+          + ". Expected format: <coin value>+<quantity> or <coin value>-<quantity>.");
+    }
   }
 }

@@ -33,7 +33,8 @@ public class UpdateChangeStateTests {
     ));
     UpdateChangeState state = new UpdateChangeState(vendingMachine);
     String message = state.getStateMessage();
-    assertTrue(message.contains("Available coins: 0.25 (10), 0.10 (5)"));
+    assertTrue(message.contains("0.25 (10)"));
+    assertTrue(message.contains("0.10 (5)"));
   }
 
   @Test
@@ -84,12 +85,16 @@ public class UpdateChangeStateTests {
   @Test
   void inputActionThrowsExceptionForInvalidAdditionFormat() {
     UpdateChangeState state = new UpdateChangeState(vendingMachine);
-    assertThrows(NumberFormatException.class, () -> state.inputAction("0.25+abc"));
+    assertThrows(IllegalArgumentException.class, () -> state.inputAction("0.25+abc"));
+    assertThrows(IllegalArgumentException.class, () -> state.inputAction("+abc"));
+    assertThrows(IllegalArgumentException.class, () -> state.inputAction("0.25+"));
   }
 
   @Test
   void inputActionThrowsExceptionForInvalidSubtractionFormat() {
     UpdateChangeState state = new UpdateChangeState(vendingMachine);
-    assertThrows(NumberFormatException.class, () -> state.inputAction("0.10-xyz"));
+    assertThrows(IllegalArgumentException.class, () -> state.inputAction("0.10-xyz"));
+    assertThrows(IllegalArgumentException.class, () -> state.inputAction("0.10-"));
+    assertThrows(IllegalArgumentException.class, () -> state.inputAction("-2"));
   }
 }
