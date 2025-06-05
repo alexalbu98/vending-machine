@@ -34,7 +34,7 @@ public class IdleState implements VendingMachineState {
   @Override
   public void inputAction(String input) {
     if (input.equals(CARD_PAYMENT)) {
-      //TODO implement card payment
+      vendingMachine.setState(new CardPaymentState(vendingMachine));
       return;
     }
     if (input.equals(RESET_COMMAND)) {

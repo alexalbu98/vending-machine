@@ -2,8 +2,11 @@ package me.alex.vendingmachine;
 
 import static me.alex.vendingmachine.domain.coin.CoinFactory.dime;
 import static me.alex.vendingmachine.domain.product.ProductFactory.coke;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -174,5 +177,77 @@ public class VendingMachineTests {
     when(coinReader.readCoin("DIME")).thenReturn(dime());
     vendingMachine.removeCoin("DIME", 2);
     verify(changeStore).removeCoin(dime(), 2);
+  }
+
+  @Test
+  void verifyProductQuantityThrowsExceptionForInvalidProductCode() {
+    when(vendingMachine.getAvailableProducts()).thenReturn(List.of());
+    assertThrows(IllegalArgumentException.class, () -> vendingMachine.verifyProductQuantity("999"));
+  }
+
+  @Test
+  void verifyProductQuantityThrowsExceptionWhenProductIsOutOfStock() {
+    ProductInventory productInventory = mock(ProductInventory.class);
+    when(productInventory.getCode()).thenReturn(1);
+    when(productInventory.getQuantity()).thenReturn(0);
+    when(productInventory.getProduct()).thenReturn(coke());
+    when(vendingMachine.getAvailableProducts()).thenReturn(List.of(productInventory));
+
+    assertThrows(IllegalStateException.class, () -> vendingMachine.verifyProductQuantity("1"));
+  }
+
+  @Test
+  void verifyProductQuantityDoesNotThrowExceptionWhenProductIsInStock() {
+    ProductInventory productInventory = mock(ProductInventory.class);
+    when(productInventory.getCode()).thenReturn(1);
+    when(productInventory.getQuantity()).thenReturn(5);
+    when(vendingMachine.getAvailableProducts()).thenReturn(List.of(productInventory));
+
+    assertDoesNotThrow(() -> vendingMachine.verifyProductQuantity("1"));
+  }
+
+  @Test
+  void verifyEnoughCreditToBuyThrowsExceptionForInvalidProductCode() {
+    when(vendingMachine.getAvailableProducts()).thenReturn(List.of());
+
+    assertThrows(IllegalArgumentException.class,
+        () -> vendingMachine.verifyEnoughCreditToBuy("999"));
+  }
+
+  @Test
+  void verifyEnoughCreditToBuyThrowsExceptionWhenCreditIsInsufficient() {
+    ProductInventory productInventory = mock(ProductInventory.class);
+    when(productInventory.getCode()).thenReturn(1);
+    when(productInventory.getProduct()).thenReturn(coke());
+    when(vendingMachine.getAvailableProducts()).thenReturn(List.of(productInventory));
+
+    vendingMachine.setCurrentCredit(new BigDecimal("0.50"));
+    assertThrows(IllegalStateException.class, () -> vendingMachine.verifyEnoughCreditToBuy("1"));
+  }
+
+  @Test
+  void verifyEnoughCreditToBuyDoesNotThrowWhenCreditIsSufficient() {
+    ProductInventory productInventory = mock(ProductInventory.class);
+    when(productInventory.getCode()).thenReturn(1);
+    when(productInventory.getProduct()).thenReturn(coke());
+    when(vendingMachine.getAvailableProducts()).thenReturn(List.of(productInventory));
+
+    assertDoesNotThrow(() -> vendingMachine.verifyEnoughCreditToBuy("1"));
+  }
+
+  @Test
+  void productCodeExistsReturnsTrueForExistingProductCode() {
+    ProductInventory productInventory = mock(ProductInventory.class);
+    when(productInventory.getCode()).thenReturn(1);
+    when(vendingMachine.getAvailableProducts()).thenReturn(List.of(productInventory));
+
+    assertTrue(vendingMachine.productCodeExists("1"));
+  }
+
+  @Test
+  void productCodeExistsReturnsFalseForNonExistingProductCode() {
+    when(vendingMachine.getAvailableProducts()).thenReturn(List.of());
+
+    assertFalse(vendingMachine.productCodeExists("999"));
   }
 }
