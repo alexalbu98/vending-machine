@@ -84,6 +84,6 @@ public class ChangeProductQuantityStateTests {
   @Test
   void inputActionThrowsExceptionForNonNumericQuantity() {
     ChangeProductQuantityState state = new ChangeProductQuantityState(vendingMachine);
-    assertThrows(NumberFormatException.class, () -> state.inputAction("1=abc"));
+    assertThrows(IllegalArgumentException.class, () -> state.inputAction("1=abc"));
   }
 }

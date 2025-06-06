@@ -1,5 +1,8 @@
 package me.alex.vendingmachine.domain.state.reset;
 
+import static me.alex.vendingmachine.domain.state.reset.ResetInputUtils.getProductCode;
+import static me.alex.vendingmachine.domain.state.reset.ResetInputUtils.getProductQuantity;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
@@ -40,18 +43,5 @@ public class ChangeProductQuantityState implements VendingMachineState {
   @Override
   public boolean canAcceptInput() {
     return true;
-  }
-
-  private int getProductCode(String input) {
-    return Integer.parseInt(input.split("=")[0].trim());
-  }
-
-  private Integer getProductQuantity(String input) {
-    var args = input.split("=");
-    if (args.length != 2) {
-      throw new IllegalArgumentException(
-          "Invalid input format. Expected format: <product code>=<quantity>");
-    }
-    return Integer.parseInt(args[1].trim());
   }
 }

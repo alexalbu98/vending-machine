@@ -1,6 +1,8 @@
 package me.alex.vendingmachine.domain.state.reset;
 
-import java.math.BigDecimal;
+import static me.alex.vendingmachine.domain.state.reset.ResetInputUtils.getNewPrice;
+import static me.alex.vendingmachine.domain.state.reset.ResetInputUtils.getProductCode;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
@@ -41,18 +43,5 @@ public class ChangeProductPriceState implements VendingMachineState {
   @Override
   public boolean canAcceptInput() {
     return true;
-  }
-
-  private int getProductCode(String input) {
-    return Integer.parseInt(input.split("=")[0].trim());
-  }
-
-  private BigDecimal getNewPrice(String input) {
-    var args = input.split("=");
-    if (args.length != 2) {
-      throw new IllegalArgumentException(
-          "Invalid input format. Expected format: <product code>=<price>");
-    }
-    return new BigDecimal(args[1].trim());
   }
 }
