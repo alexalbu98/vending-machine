@@ -1,16 +1,16 @@
 package me.alex.vendingmachine.domain.state;
 
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
 import me.alex.vendingmachine.domain.state.card.CardPaymentState;
-import me.alex.vendingmachine.domain.state.reset.ResetState;
 
-@RequiredArgsConstructor
-public class IdleState implements VendingMachineState {
+public class IdleState extends ResettableState {
 
-  private final VendingMachine vendingMachine;
   private static final String CARD_PAYMENT = "card";
+
+  public IdleState(VendingMachine vendingMachine) {
+    super(vendingMachine);
+  }
 
   @Override
   public String getStateMessage() {
@@ -34,13 +34,9 @@ public class IdleState implements VendingMachineState {
   }
 
   @Override
-  public void inputAction(String input) {
+  protected void notResetAction(String input) {
     if (input.equals(CARD_PAYMENT)) {
       vendingMachine.setState(new CardPaymentState(vendingMachine));
-      return;
-    }
-    if (input.equals(RESET_COMMAND)) {
-      vendingMachine.setState(new ResetState(vendingMachine));
       return;
     }
     vendingMachine.insertCoin(input);

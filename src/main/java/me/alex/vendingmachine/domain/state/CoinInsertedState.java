@@ -1,15 +1,15 @@
 package me.alex.vendingmachine.domain.state;
 
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
-import me.alex.vendingmachine.domain.state.reset.ResetState;
 
-@RequiredArgsConstructor
-public class CoinInsertedState implements VendingMachineState {
+public class CoinInsertedState extends ResettableState {
 
-  private final VendingMachine vendingMachine;
-  private final String REFUND = "R";
+  private static final String REFUND = "R";
+
+  public CoinInsertedState(VendingMachine vendingMachine) {
+    super(vendingMachine);
+  }
 
   @Override
   public String getStateMessage() {
@@ -35,7 +35,7 @@ public class CoinInsertedState implements VendingMachineState {
   }
 
   @Override
-  public void inputAction(String input) {
+  protected void notResetAction(String input) {
     if (vendingMachine.productCodeExists(input)) {
       vendingMachine.verifyEnoughCreditToBuy(input);
       vendingMachine.verifyProductQuantity(input);
@@ -44,10 +44,6 @@ public class CoinInsertedState implements VendingMachineState {
     }
     if (input.equals(REFUND)) {
       vendingMachine.setState(new RefundingState(vendingMachine));
-      return;
-    }
-    if (input.equals(RESET_COMMAND)) {
-      vendingMachine.setState(new ResetState(vendingMachine));
       return;
     }
     vendingMachine.insertCoin(input);
