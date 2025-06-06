@@ -15,7 +15,7 @@ public class CoinInsertedState implements VendingMachineState {
   public String getStateMessage() {
     String message = "Available credit: " + vendingMachine.getCurrentCredit();
     if (vendingMachine.isLowOnChange()) {
-      message += "\nWarning: Vending machine is low on change! Use fix money!\n";
+      message += "\nWarning: Vending machine is low on change! Use fix money or pay by card!\n";
     }
     return message + "\n" + formatProductsAsString(vendingMachine);
   }
