@@ -11,10 +11,7 @@ public class ReadCardDetailsState implements VendingMachineState {
 
   private final VendingMachine vendingMachine;
   private final String productCode;
-  private final String cardNumber;
-  private final String expiryDate;
-  private final String cardHolderName;
-  private final String cvv;
+  private final CreditCardDetails creditCardDetails;
 
   @Override
   public String getStateMessage() {
@@ -23,16 +20,17 @@ public class ReadCardDetailsState implements VendingMachineState {
 
   @Override
   public List<String> getAvailableOptions() {
-    if (cardNumber == null || cardNumber.isEmpty()) {
+    if (creditCardDetails.cardNumber() == null || creditCardDetails.cardNumber().isEmpty()) {
       return List.of("Please enter card number:");
     }
-    if (expiryDate == null || expiryDate.isEmpty()) {
-      return List.of("Please enter card expiry date (MM/YY):");
-    }
-    if (cardHolderName == null || cardHolderName.isEmpty()) {
+    if (creditCardDetails.cardHolderName() == null || creditCardDetails.cardHolderName()
+        .isEmpty()) {
       return List.of("Please enter cardholder name:");
     }
-    if (cvv == null || cvv.isEmpty()) {
+    if (creditCardDetails.expiryDate() == null || creditCardDetails.expiryDate().isEmpty()) {
+      return List.of("Please enter card expiry date (MM/YY):");
+    }
+    if (creditCardDetails.cvv() == null || creditCardDetails.cvv().isEmpty()) {
       return List.of("Please enter card CVV:");
     }
     return List.of();
@@ -45,32 +43,32 @@ public class ReadCardDetailsState implements VendingMachineState {
 
   @Override
   public void inputAction(String input) {
-    if (cardNumber == null || cardNumber.isEmpty()) {
+    if (creditCardDetails.cardNumber() == null || creditCardDetails.cardNumber().isEmpty()) {
       verifyCardNumber(input);
       vendingMachine.setState(
-          new ReadCardDetailsState(vendingMachine, productCode, input, expiryDate, cardHolderName,
-              cvv));
+          new ReadCardDetailsState(vendingMachine, productCode,
+              creditCardDetails.setCardNumber(input)));
       return;
     }
-    if (expiryDate == null || expiryDate.isEmpty()) {
+    if (creditCardDetails.cardHolderName() == null || creditCardDetails.cardHolderName()
+        .isEmpty()) {
+      verifyCardHolderName(input);
+      vendingMachine.setState(
+          new ReadCardDetailsState(vendingMachine, productCode,
+              creditCardDetails.setCardHolderName(input)));
+      return;
+    }
+    if (creditCardDetails.expiryDate() == null || creditCardDetails.expiryDate().isEmpty()) {
       verifyExpiryDate(input);
       vendingMachine.setState(
-          new ReadCardDetailsState(vendingMachine, productCode, cardNumber, input, cardHolderName,
-              cvv));
+          new ReadCardDetailsState(vendingMachine, productCode,
+              creditCardDetails.setExpiryDate(input)));
       return;
     }
-    if (cardHolderName == null || cardHolderName.isEmpty()) {
-      vendingMachine.setState(
-          new ReadCardDetailsState(vendingMachine, productCode, cardNumber, expiryDate, input,
-              cvv));
-      return;
-    }
-    if (cvv == null || cvv.isEmpty()) {
+    if (creditCardDetails.cvv() == null || creditCardDetails.cvv().isEmpty()) {
       verifyCVV(input);
       vendingMachine.setState(
-          new ProcessingPaymentState(vendingMachine,
-              new CreditCardDetails(cardNumber, cardHolderName, expiryDate,
-                  cvv), productCode));
+          new ProcessingPaymentState(vendingMachine, creditCardDetails.setCvv(input), productCode));
     }
   }
 
@@ -82,6 +80,13 @@ public class ReadCardDetailsState implements VendingMachineState {
   private void verifyCardNumber(String cardNumber) {
     if (!cardNumber.matches("\\d+")) {
       throw new IllegalArgumentException("Invalid card number format. Please enter only digits.");
+    }
+  }
+
+  private void verifyCardHolderName(String cardHolderName) {
+    if (!cardHolderName.matches("[a-zA-Z ]+")) {
+      throw new IllegalArgumentException(
+          "Invalid cardholder name format. Use letters and spaces only.");
     }
   }
 

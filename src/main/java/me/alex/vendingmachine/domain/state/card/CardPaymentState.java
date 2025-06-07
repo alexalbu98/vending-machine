@@ -3,6 +3,7 @@ package me.alex.vendingmachine.domain.state.card;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.alex.vendingmachine.domain.VendingMachine;
+import me.alex.vendingmachine.domain.payment.CreditCardDetails;
 import me.alex.vendingmachine.domain.state.IdleState;
 import me.alex.vendingmachine.domain.state.VendingMachineState;
 
@@ -38,7 +39,8 @@ public class CardPaymentState implements VendingMachineState {
     }
     if (vendingMachine.productCodeExists(input)) {
       vendingMachine.verifyProductQuantity(input);
-      vendingMachine.setState(new ReadCardDetailsState(vendingMachine, input, null, null, null, null));
+      vendingMachine.setState(
+          new ReadCardDetailsState(vendingMachine, input, CreditCardDetails.emptyCardDetails()));
       return;
     }
     throw new IllegalArgumentException("Invalid product code: " + input);
