@@ -1,8 +1,10 @@
 package me.alex.vendingmachine.domain.product;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
+@EqualsAndHashCode
 public class ProductInventory {
 
   private Product product;

@@ -2,6 +2,8 @@ package me.alex.vendingmachine;
 
 import static me.alex.vendingmachine.domain.coin.CoinFactory.dime;
 import static me.alex.vendingmachine.domain.product.ProductFactory.coke;
+import static me.alex.vendingmachine.domain.product.ProductFactory.pepsi;
+import static me.alex.vendingmachine.domain.product.ProductFactory.water;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -24,6 +26,7 @@ import me.alex.vendingmachine.domain.payment.CardPaymentResult;
 import me.alex.vendingmachine.domain.payment.CreditCardDetails;
 import me.alex.vendingmachine.domain.payment.PaymentProcessorClient;
 import me.alex.vendingmachine.domain.product.ProductInventory;
+import me.alex.vendingmachine.domain.product.ProductInventorySnapshot;
 import me.alex.vendingmachine.domain.product.ProductSystem;
 import me.alex.vendingmachine.domain.state.VendingMachineState;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,11 +36,16 @@ public class VendingMachineTests {
 
   VendingMachine vendingMachine;
   ProductSystem productSystem;
-  ProductInventory productInventory;
   VendingMachineState currentState = mock(VendingMachineState.class);
   CoinReader coinReader;
   ChangeStore changeStore;
   PaymentProcessorClient paymentProcessorClient;
+
+  private final List<ProductInventory> productInventory = List.of(
+      new ProductInventory(coke(), 10, 10, 60),
+      new ProductInventory(pepsi(), 10, 10, 61),
+      new ProductInventory(water(), 10, 0, 62)
+  );
 
   private final CreditCardDetails creditCardDetails = new CreditCardDetails("1234567890123456",
       "alex", "12/25", "123");
@@ -45,11 +53,15 @@ public class VendingMachineTests {
   @BeforeEach
   void setupMocks() {
     productSystem = mock(ProductSystem.class);
-    productInventory = mock(ProductInventory.class);
     currentState = mock(VendingMachineState.class);
     coinReader = mock(CoinReader.class);
     changeStore = mock(ChangeStore.class);
     paymentProcessorClient = mock(PaymentProcessorClient.class);
+
+    when(productSystem.getProductInventory()).thenReturn(productInventory);
+    when(productSystem.getProductInventory(60)).thenReturn(productInventory.get(0));
+    when(productSystem.getProductInventory(61)).thenReturn(productInventory.get(1));
+    when(productSystem.getProductInventory(62)).thenReturn(productInventory.get(2));
 
     vendingMachine = VendingMachine.builder()
         .productSystem(productSystem)
@@ -114,23 +126,14 @@ public class VendingMachineTests {
 
   @Test
   void updateCreditSubtractsProductPriceFromCurrentCredit() {
-    when(productSystem.getProductInventory(1)).thenReturn(productInventory);
-    when(productInventory.getProduct()).thenReturn(coke());
-
-    vendingMachine.payProduct(1);
-
+    vendingMachine.payProduct(60);
     assertEquals(new BigDecimal("0.50"), vendingMachine.getCurrentCredit());
   }
 
   @Test
   void getAvailableProductsReturnsProductListFromProductSystem() {
-    List<ProductInventory> products = List.of(mock(ProductInventory.class),
-        mock(ProductInventory.class));
-    when(productSystem.getProductInventory()).thenReturn(products);
-
     List<ProductInventory> result = vendingMachine.getAvailableProducts();
-
-    assertEquals(products, result);
+    assertEquals(productInventory.stream().map(ProductInventorySnapshot::from).toList(), result);
   }
 
   @Test
@@ -196,23 +199,12 @@ public class VendingMachineTests {
 
   @Test
   void verifyProductQuantityThrowsExceptionWhenProductIsOutOfStock() {
-    ProductInventory productInventory = mock(ProductInventory.class);
-    when(productInventory.getCode()).thenReturn(1);
-    when(productInventory.getQuantity()).thenReturn(0);
-    when(productInventory.getProduct()).thenReturn(coke());
-    when(vendingMachine.getAvailableProducts()).thenReturn(List.of(productInventory));
-
-    assertThrows(IllegalStateException.class, () -> vendingMachine.verifyProductQuantity("1"));
+    assertThrows(IllegalStateException.class, () -> vendingMachine.verifyProductQuantity("62"));
   }
 
   @Test
   void verifyProductQuantityDoesNotThrowExceptionWhenProductIsInStock() {
-    ProductInventory productInventory = mock(ProductInventory.class);
-    when(productInventory.getCode()).thenReturn(1);
-    when(productInventory.getQuantity()).thenReturn(5);
-    when(vendingMachine.getAvailableProducts()).thenReturn(List.of(productInventory));
-
-    assertDoesNotThrow(() -> vendingMachine.verifyProductQuantity("1"));
+    assertDoesNotThrow(() -> vendingMachine.verifyProductQuantity("60"));
   }
 
   @Test
@@ -225,32 +217,18 @@ public class VendingMachineTests {
 
   @Test
   void verifyEnoughCreditToBuyThrowsExceptionWhenCreditIsInsufficient() {
-    ProductInventory productInventory = mock(ProductInventory.class);
-    when(productInventory.getCode()).thenReturn(1);
-    when(productInventory.getProduct()).thenReturn(coke());
-    when(vendingMachine.getAvailableProducts()).thenReturn(List.of(productInventory));
-
     vendingMachine.setCurrentCredit(new BigDecimal("0.50"));
-    assertThrows(IllegalStateException.class, () -> vendingMachine.verifyEnoughCreditToBuy("1"));
+    assertThrows(IllegalStateException.class, () -> vendingMachine.verifyEnoughCreditToBuy("60"));
   }
 
   @Test
   void verifyEnoughCreditToBuyDoesNotThrowWhenCreditIsSufficient() {
-    ProductInventory productInventory = mock(ProductInventory.class);
-    when(productInventory.getCode()).thenReturn(1);
-    when(productInventory.getProduct()).thenReturn(coke());
-    when(vendingMachine.getAvailableProducts()).thenReturn(List.of(productInventory));
-
-    assertDoesNotThrow(() -> vendingMachine.verifyEnoughCreditToBuy("1"));
+    assertDoesNotThrow(() -> vendingMachine.verifyEnoughCreditToBuy("60"));
   }
 
   @Test
   void productCodeExistsReturnsTrueForExistingProductCode() {
-    ProductInventory productInventory = mock(ProductInventory.class);
-    when(productInventory.getCode()).thenReturn(1);
-    when(vendingMachine.getAvailableProducts()).thenReturn(List.of(productInventory));
-
-    assertTrue(vendingMachine.productCodeExists("1"));
+    assertTrue(vendingMachine.productCodeExists("60"));
   }
 
   @Test

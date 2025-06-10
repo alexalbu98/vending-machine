@@ -58,7 +58,7 @@ public class InMemoryChangeStore implements ChangeStore {
 
   @Override
   public Map<Coin, Integer> getCoins() {
-    return Collections.unmodifiableMap(this.coinMap);
+    return this.coinMap;
   }
 
   @Override

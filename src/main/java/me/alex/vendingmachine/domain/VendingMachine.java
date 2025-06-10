@@ -1,8 +1,10 @@
 package me.alex.vendingmachine.domain;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import me.alex.vendingmachine.domain.payment.CardPaymentResult;
 import me.alex.vendingmachine.domain.payment.CreditCardDetails;
 import me.alex.vendingmachine.domain.payment.PaymentProcessorClient;
 import me.alex.vendingmachine.domain.product.ProductInventory;
+import me.alex.vendingmachine.domain.product.ProductInventorySnapshot;
 import me.alex.vendingmachine.domain.product.ProductSystem;
 import me.alex.vendingmachine.domain.state.VendingMachineState;
 
@@ -72,7 +75,10 @@ public class VendingMachine {
   }
 
   public List<ProductInventory> getAvailableProducts() {
-    return productSystem.getProductInventory();
+    return productSystem.getProductInventory()
+        .stream().map(ProductInventorySnapshot::from)
+        .collect(
+            Collectors.toUnmodifiableList());
   }
 
   public List<String> getAvailableOptions() {
@@ -134,7 +140,7 @@ public class VendingMachine {
   }
 
   public Map<Coin, Integer> getCoins() {
-    return changeStore.getCoins();
+    return Collections.unmodifiableMap(changeStore.getCoins());
   }
 
   public void emptyAllCoins() {
