@@ -134,8 +134,8 @@ public class InMemoryProductSystemTests {
   @Test
   void updateProductQuantityUpdatesQuantitySuccessfully() {
     productSystem.addProductInventory(inventory);
-    productSystem.updateProductQuantity(60, 15);
-    assertEquals(15, productSystem.getProductInventory(60).getQuantity());
+    productSystem.updateProductQuantity(60, 8);
+    assertEquals(8, productSystem.getProductInventory(60).getQuantity());
   }
 
   @Test
@@ -158,8 +158,14 @@ public class InMemoryProductSystemTests {
   @Test
   void updateProductQuantityPreservesProductDetails() {
     productSystem.addProductInventory(inventory);
-    productSystem.updateProductQuantity(60, 20);
+    productSystem.updateProductQuantity(60, 10);
     assertEquals("Chips", productSystem.getProductInventory(60).getProduct().name());
-    assertEquals(new BigDecimal("2.00"), productSystem.getProductInventory(60).getProduct().price());
+    assertEquals(new BigDecimal("2.00"),
+        productSystem.getProductInventory(60).getProduct().price());
+  }
+
+  @Test
+  void updateProductQuantityPreservesProductDetailsForInputAboveMaxQuantity() {
+    assertThrows(IllegalArgumentException.class, () -> productSystem.updateProductQuantity(60, 20));
   }
 }

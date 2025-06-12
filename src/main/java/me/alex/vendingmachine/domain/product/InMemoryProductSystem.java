@@ -67,6 +67,9 @@ public class InMemoryProductSystem implements ProductSystem {
     if (inventory == null) {
       throw new IllegalArgumentException("Product with code " + productCode + " not found.");
     }
+    if(productQuantity > inventory.getMaxQuantity()){
+      throw new IllegalArgumentException("Product quantity cannot be above " + inventory.getMaxQuantity());
+    }
     inventory.setQuantity(productQuantity);
     products.put(productCode, inventory);
   }

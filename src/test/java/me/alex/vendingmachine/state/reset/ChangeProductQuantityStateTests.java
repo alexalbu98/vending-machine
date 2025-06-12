@@ -86,4 +86,5 @@ public class ChangeProductQuantityStateTests {
     ChangeProductQuantityState state = new ChangeProductQuantityState(vendingMachine);
     assertThrows(IllegalArgumentException.class, () -> state.inputAction("1=abc"));
   }
+
 }
